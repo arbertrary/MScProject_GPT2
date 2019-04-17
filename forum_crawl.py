@@ -1,6 +1,9 @@
 import requests
+import re
+import os
 from bs4 import BeautifulSoup
 import itertools
+from lxml import etree
 
 
 # get list of urls from sitemap here
@@ -14,6 +17,50 @@ def read_sitemap(url):
     sitemaps = list(map(lambda x: x.getText(), sitemap.find_all("loc")))
 
     return sitemaps
+
+
+def read_sitemap_xml():
+    # for sitemap in os.listdir("andro_sitemaps"):
+    # path = os.path.join("andro_sitemaps", sitemap)
+    # print(path)
+    path = "andro_sitemaps/sitemap-google2.xml"
+
+    with open(path) as xml:
+        sitemap = BeautifulSoup(xml.read(), "lxml-xml")
+        links = list(map(lambda x: x.getText(), sitemap.find_all("loc")))
+
+        test = set()
+        for link in links:
+            read_forum_page(link)
+
+
+def read_forum_page(url):
+    if "phpBB3" in url:
+        text = requests.get(url).text
+        soup = BeautifulSoup(text, "html.parser")
+        # print(soup)
+        posts = soup.find_all("div", id=re.compile("p\d+"))
+
+        for post in posts:
+            post_id = post.get("id")
+            text = post.find("div", class_="content").getText()
+
+            print(post_id)
+            print(url+"#"+post_id)
+            print(text)
+
+
+
+    #     Necessary info_
+    # link title
+    # username or user profile id="profile\d+"
+    # post id? id="p\d+"
+
+    # threadstruktur über Ordner, jeder post als einzelne textdatei
+    # mongodb -> metadaten (post id usw + link zur textdatei oder zum post?)
+
+    else:
+        pass
 
 
 def get_all_andro_pages():
@@ -53,5 +100,12 @@ def crawl_andro():
     # For TA news
 
 
+def create_folders():
+    for file in os.listdir("andro_sitemaps"):
+        name = os.path.splitext(file)[0]
+        print(name)
+        os.mkdir(os.path.join("andro_text", name))
+
+
 if __name__ == '__main__':
-# get_andro_sitemaps_as_files()
+    read_sitemap_xml()
