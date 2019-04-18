@@ -3,7 +3,8 @@ import re
 import os
 from bs4 import BeautifulSoup
 import itertools
-from lxml import etree
+from tqdm import tqdm
+import time
 
 
 # get list of urls from sitemap here
@@ -20,34 +21,61 @@ def read_sitemap(url):
 
 
 def read_sitemap_xml():
-    # for sitemap in os.listdir("andro_sitemaps"):
-    # path = os.path.join("andro_sitemaps", sitemap)
-    # print(path)
-    path = "andro_sitemaps/sitemap-google2.xml"
+    for sitemap in os.listdir("andro_sitemaps"):
 
-    with open(path) as xml:
-        sitemap = BeautifulSoup(xml.read(), "lxml-xml")
-        links = list(map(lambda x: x.getText(), sitemap.find_all("loc")))
+        path = os.path.join("andro_sitemaps", sitemap)
+        print(path)
 
-        test = set()
-        for link in links:
-            read_forum_page(link)
+        with open(path) as xml:
+            sitemap = BeautifulSoup(xml.read(), "lxml-xml")
+            links = list(map(lambda x: x.getText(), sitemap.find_all("loc")))
+
+            test = set()
+            for link in tqdm(links):
+                read_forum_page(link)
 
 
 def read_forum_page(url):
     if "phpBB3" in url:
         text = requests.get(url).text
         soup = BeautifulSoup(text, "html.parser")
-        # print(soup)
-        posts = soup.find_all("div", id=re.compile("p\d+"))
+
+        m = re.search(r"-(t\d+)", url)
+        if m:
+            thread_id = m.group(1)
+        else:
+            thread_id = "t0000"
+
+        posts = soup.find_all("div", id=re.compile(r"p\d+"))
+        navlinks = soup.find("ul", class_="linklist navlinks").find_all("a")
+        navlinks = [x.getText().replace(" ", "_") for x in navlinks]
+        navlinks.append(thread_id)
+        path = os.path.join("andro_text", *navlinks)
+
+        if not os.path.exists(path):
+            os.makedirs(path)
 
         for post in posts:
             post_id = post.get("id")
             text = post.find("div", class_="content").getText()
+            user_block = post.find("a", href=re.compile(r"team-andro.com/my/.+-u\d+"))
 
-            print(post_id)
-            print(url+"#"+post_id)
-            print(text)
+            if not user_block:
+                user_url = "user_deleted"
+            else:
+                user_url = user_block.get("href")
+
+            # print("############")
+            # print(user_url)
+            # print(post_id)
+            # print(url+"#"+post_id)
+            # print(text)
+
+            filepath = os.path.join(path, post_id)
+            if not os.path.exists(filepath):
+                with open(filepath, "w") as post_textfile:
+                    post_textfile.write(text)
+
 
 
 
