@@ -1,0 +1,17 @@
+docker build -t andro_crawler . 
+(was macht der punkt?)
+
+docker run -v /<some path>:/andro_text andro_crawler
+
+# mongo 
+docker run -d -p 27017:27017 -v /<some path>:/data/db mongo
+
+/*
+-d = run as daemon
+-p host-port:internal-port
+-v host-vol:internal-vol
+*/
+
+# Mongodb
+mongod --dbpath ./db/ -- start server/daemon
+mongo -- opens shell at localhost:27017
