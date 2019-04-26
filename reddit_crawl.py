@@ -6,11 +6,9 @@ reddit = praw.Reddit(client_id="yvmTRQmbs91y8A", client_secret="musranLO2f-D3dsk
 
 subreddits = ["de", "de_iama", "rocketbeans", "austria"]
 
-#  mongod --dbpath ./db/ -- start server/daemon
-# mongo -- opens shell at localhost:27017
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-mydb = myclient["mydatabase"]
-mycol = mydb["comments"]
+mydb = myclient["reddit_data"]
+mycol = mydb["reddit_comments"]
 
 mylist = []
 # for submission in reddit.subreddit("de").hot(limit=2):

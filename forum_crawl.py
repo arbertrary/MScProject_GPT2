@@ -11,8 +11,8 @@ from tqdm import tqdm
 
 def crawl_ta():
     myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-    mydb = myclient["ta_data"]
-    mycol = mydb["ta_posts"]
+    db = myclient["ta_data"]
+    coll = db["ta_posts"]
 
     top_sitemap = "https://www.team-andro.com/sitemap-google.xml"
     andro_sitemaps = read_sitemap(top_sitemap)
@@ -23,7 +23,7 @@ def crawl_ta():
             metadata = get_forum_page(page)
 
             if metadata:
-                x = mydb.mycol.insert(metadata)
+                x = coll.insert_one(metadata)
 
 
 def read_sitemap(url):
@@ -56,10 +56,11 @@ def get_forum_page(url):
 
         for post in posts:
             post_id = post.get("id")
+            post_url = url + "#" + post_id
             text = post.find("div", class_="content").getText()
             user_block = post.find("a", href=re.compile(r"team-andro.com/my/.+-u\d+"))
             author_string = post.find("p", class_="author").getText()
-            author_regex = r"von\s(.+)\s.\s(\d{2}\s\w{3}\s\d{4})\s(.+)"
+            author_regex = r"von\s(.+)\s.\s(\d{2}\s\w{3}\s\d{4})\s(.+)\s"
             pattern = re.compile(author_regex)
             m = re.search(pattern, author_string)
             if m:
@@ -82,9 +83,9 @@ def get_forum_page(url):
                     post_textfile.write(text)
 
             # Available Info:
-            metadata = {"thread_url": url, "thread_id": thread_id, "post_id": post_id, "post_date": post_date,
-                        "post_time": post_time,
-                        "author_name": author_name, "user_url": user_url, "file_path": filepath}
+            metadata = {"thread_url": url, "thread_id": thread_id, "post_id": post_id, "post_url": post_url,
+                        "post_date": post_date, "post_time": post_time, "author_name": author_name,
+                        "user_url": user_url, "file_path": filepath}
             print(metadata)
             return metadata
 

@@ -13,5 +13,13 @@ docker run -d -p 27017:27017 -v /<some path>:/data/db mongo
 */
 
 # Mongodb
-mongod --dbpath ./db/ -- start server/daemon
-mongo -- opens shell at localhost:27017
+mongod --dbpath ./db/       # start server/daemon
+mongo                       # opens shell at localhost:27017
+
+show dbs
+use <db name>
+
+show collections
+db.<collection name>.find().pretty()
+
+
