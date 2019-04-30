@@ -4,22 +4,24 @@ import os
 from bs4 import BeautifulSoup
 import pymongo
 from tqdm import tqdm
+import time
 
 
 # get list of urls from sitemap here
 # https://www.team-andro.com/sitemap-google.xml
 
 def crawl_ta():
+    # On laptop had to replace localhost with actual IP for some reason
     myclient = pymongo.MongoClient("mongodb://localhost:27017/")
     db = myclient["ta_data"]
     coll = db["ta_posts"]
-
     top_sitemap = "https://www.team-andro.com/sitemap-google.xml"
     andro_sitemaps = read_sitemap(top_sitemap)
 
     for sitemap in andro_sitemaps:
         pages = read_sitemap(sitemap)
-        for page in tqdm(pages):
+        for i, page in enumerate(tqdm(pages)):
+
             metadata = get_forum_page(page)
 
             if metadata:
@@ -86,7 +88,7 @@ def get_forum_page(url):
             metadata = {"thread_url": url, "thread_id": thread_id, "post_id": post_id, "post_url": post_url,
                         "post_date": post_date, "post_time": post_time, "author_name": author_name,
                         "user_url": user_url, "file_path": filepath}
-            print(metadata)
+            # print(metadata)
             return metadata
 
 

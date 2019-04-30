@@ -1,5 +1,4 @@
 docker build -t andro_crawler . 
-(was macht der punkt?)
 
 docker run -v /<some path>:/andro_text andro_crawler
 
