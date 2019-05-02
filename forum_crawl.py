@@ -21,11 +21,10 @@ def crawl_ta():
     for sitemap in andro_sitemaps:
         pages = read_sitemap(sitemap)
         for i, page in enumerate(tqdm(pages)):
-
             metadata = get_forum_page(page)
 
             if metadata:
-                x = coll.insert_one(metadata)
+                x = coll.insert_many(metadata)
 
 
 def read_sitemap(url):
@@ -41,7 +40,7 @@ def get_forum_page(url):
         text = requests.get(url).text
         soup = BeautifulSoup(text, "html.parser")
 
-        m = re.search(r"-(t\d+)", url)
+        m = re.search(r"-(t\d+)(-\d+)*.html", url)
         if m:
             thread_id = m.group(1)
         else:
@@ -52,9 +51,10 @@ def get_forum_page(url):
         navlinks = [x.getText().replace(" ", "_") for x in navlinks]
         navlinks.append(thread_id)
         path = os.path.join("andro_text", *navlinks)
-
         if not os.path.exists(path):
             os.makedirs(path)
+
+        meta_list = []
 
         for post in posts:
             post_id = post.get("id")
@@ -89,7 +89,9 @@ def get_forum_page(url):
                         "post_date": post_date, "post_time": post_time, "author_name": author_name,
                         "user_url": user_url, "file_path": filepath}
             # print(metadata)
-            return metadata
+            meta_list.append(metadata)
+
+        return meta_list
 
 
 # def read_sitemap_xml():
