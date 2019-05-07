@@ -58,6 +58,11 @@ def get_forum_page(url):
 
         for post in posts:
             post_id = post.get("id")
+
+            filepath = os.path.join(path, post_id)
+            if os.path.exists(filepath):
+                continue
+
             post_url = url + "#" + post_id
             text = post.find("div", class_="content").getText()
             user_block = post.find("a", href=re.compile(r"team-andro.com/my/.+-u\d+"))
@@ -79,15 +84,13 @@ def get_forum_page(url):
             else:
                 user_url = "user_deleted"
 
-            filepath = os.path.join(path, post_id)
-            if not os.path.exists(filepath):
-                with open(filepath, "w") as post_textfile:
-                    post_textfile.write(text)
+            with open(filepath, "w") as post_textfile:
+                post_textfile.write(text)
 
             # Available Info:
             metadata = {"thread_url": url, "thread_id": thread_id, "post_id": post_id, "post_url": post_url,
                         "post_date": post_date, "post_time": post_time, "author_name": author_name,
-                        "user_url": user_url, "file_path": filepath}
+                        "user_url": user_url, "file_path": filepath, "text": text}
             # print(metadata)
             meta_list.append(metadata)
 

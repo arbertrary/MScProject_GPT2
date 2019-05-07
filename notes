@@ -1,15 +1,14 @@
+# Docker
 docker build -t andro_crawler . 
 
 docker run -v /<some path>:/andro_text andro_crawler
 
-# mongo 
+## mongodb docker container 
 docker run -d -p 27017:27017 -v /<some path>:/data/db mongo
 
-/*
 -d = run as daemon
 -p host-port:internal-port
 -v host-vol:internal-vol
-*/
 
 # Mongodb
 mongod --dbpath ./db/       # start server/daemon
@@ -21,4 +20,25 @@ use <db name>
 show collections
 db.<collection name>.find().pretty()
 
+# Server
 
+## login
+
+ssh studbernstetter@vingilot
+
+## Copy around
+https://askubuntu.com/questions/157381/in-ssh-how-do-i-mv-to-my-local-system
+
+from remote to local:
+scp studbernstetter@vingilot:/home/stud/bernstetter/<path> /home/armin/<path>
+
+from local to remote:
+scp /home/armin/<path> studbernstetter@vingilot:/home/stud/bernstetter/<path>
+
+## Gitlab container registry
+
+https://gitlab2.informatik.uni-wuerzburg.de/s319059/mprak_crawlers/container_registry
+
+## kubernetes deploy stuff
+
+see template.yml file

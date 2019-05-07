@@ -1,0 +1,37 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ta_crawler
+  namespace: studbernstetter
+  annotations:
+    description: "Deployment for a crawler for a large german web forum. \n Container ta_crawler crawls the Team-Andro forum, stores the posts as files and inserts them into a mongodb, container ta_mongodb starts a mongodb."
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: ta_crawöer
+    spec:
+      containers:
+      - resources:
+        name: ta_crawler
+        image: gitlab2.informatik.uni-wuerzburg.de:4567/s319059/mprak_crawlers/djinn-publish:1.0
+        imagePullPolicy: Always
+        volumeMounts:
+        - mountPath: /opt/data #the path inside the container
+          name: ta_text
+      - resources
+        name: ta_mongodb
+        image: gitlab2.informatik.uni-wuerzburg.de:4567/319059/mprak_crawlers/logstash-harvester-kube:1.0
+        imagePullPolicy: Always
+      volumes:
+      - name: ta_text
+        cephfs:
+          monitors:
+          - 132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10
+          user: studbernstetter
+          path: "/home/stud/bernstetter/dir"
+          secretRef:
+            name: ceph-secret-studbernstetter
+      imagePullSecrets:
+      - name: stud-registry
