@@ -50,7 +50,7 @@ def get_forum_page(url):
         navlinks = soup.find("ul", class_="linklist navlinks").find_all("a")
         navlinks = [x.getText().replace(" ", "_") for x in navlinks]
         navlinks.append(thread_id)
-        path = os.path.join("andro_text", *navlinks)
+        path = os.path.join("ta_text", *navlinks)
         if not os.path.exists(path):
             os.makedirs(path)
 

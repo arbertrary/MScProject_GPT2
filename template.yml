@@ -10,28 +10,41 @@ spec:
   template:
     metadata:
       labels:
-        name: ta_crawöer
+        name: ta_crawler
     spec:
       containers:
-      - resources:
-        name: ta_crawler
-        image: gitlab2.informatik.uni-wuerzburg.de:4567/s319059/mprak_crawlers/djinn-publish:1.0
-        imagePullPolicy: Always
-        volumeMounts:
-        - mountPath: /opt/data #the path inside the container
-          name: ta_text
-      - resources
-        name: ta_mongodb
-        image: gitlab2.informatik.uni-wuerzburg.de:4567/319059/mprak_crawlers/logstash-harvester-kube:1.0
-        imagePullPolicy: Always
+        - resources:
+          name: ta_crawler
+          image: gitlab2.informatik.uni-wuerzburg.de:4567/s319059/mprak_crawlers/ta_crawler
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: /ta_text #the path inside the container
+              name: ta_text
+        - resources:
+          name: ta_mongodb
+          image: mongo # TODO: Ports? Will pymongo in the crawler find localhost:27017?
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - mountPath: /data/db
+              name: ta_mongodb
+          imagePullPolicy: Always
       volumes:
-      - name: ta_text
-        cephfs:
-          monitors:
-          - 132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10
-          user: studbernstetter
-          path: "/home/stud/bernstetter/dir"
-          secretRef:
-            name: ceph-secret-studbernstetter
+        - name: ta_text
+          cephfs:
+            monitors:
+              - 132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10
+            user: studbernstetter
+            path: "/home/stud/bernstetter/ta_crawler/ta_text"
+            secretRef:
+              name: ceph-secret-studbernstetter
+        - name: ta_mongodb
+          cephfs:
+            monitors:
+              - 132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10
+            user: studbernstetter
+            path: "/home/stud/bernstetter/ta_crawler/ta_mongodb"
+            secretRef:
+              name: ceph-secret-studbernstetter
       imagePullSecrets:
-      - name: stud-registry
+        - name: stud-registry

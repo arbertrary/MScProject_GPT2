@@ -42,3 +42,14 @@ https://gitlab2.informatik.uni-wuerzburg.de/s319059/mprak_crawlers/container_reg
 ## kubernetes deploy stuff
 
 see template.yml file
+
+## ssh
+Host login6
+   HostName login6.informatik.uni-wuerzburg.de
+   ForwardAgent yes
+   user studbernstetter
+
+Host vingilot
+   HostName vingilot.informatik.uni-wuerzburg.de
+   User studbernstetter
+   ProxyCommand ssh login6 nc %h %p
