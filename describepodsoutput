@@ -1,0 +1,85 @@
+[studbernstetter@vingilot Foren-Übersicht]$ kubectl -n studbernstetter describe pods
+Name:               ta-crawler-7b8f86687c-474xb
+Namespace:          studbernstetter
+Priority:           0
+PriorityClassName:  <none>
+Node:               orome/132.187.14.9
+Start Time:         Thu, 09 May 2019 16:46:39 +0200
+Labels:             name=ta-crawler
+                    pod-template-hash=7b8f86687c
+Annotations:        <none>
+Status:             Running
+IP:                 10.1.3.114
+Controlled By:      ReplicaSet/ta-crawler-7b8f86687c
+Containers:
+  ta-crawler:
+    Container ID:   docker://ccd8ccc3535a23265bb22e27fd02620610f2335a76c8416c7b102e95d0209acb
+    Image:          gitlab2.informatik.uni-wuerzburg.de:4567/s319059/mprak_crawlers/ta_crawler
+    Image ID:       docker-pullable://gitlab2.informatik.uni-wuerzburg.de:4567/s319059/mprak_crawlers/ta_crawler@sha256:c6f4f261dc9eb90d58f2da4ccd8355ffb256bfcc35b59f6df46a3bd7f7a5e0ac
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Thu, 09 May 2019 16:46:54 +0200
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /ta_text from ta-text (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-6b56p (ro)
+  ta-mongodb:
+    Container ID:   docker://3458950095b2a693c92ee9a1bb7bd6007781d06266401d953f4b7dc5b1e04020
+    Image:          mongo
+    Image ID:       docker-pullable://mongo@sha256:02c6031b363fb9a43f6633eb9db405db59c9dfdd0ce726baa4fab973939952a4
+    Port:           27017/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Thu, 09 May 2019 16:46:57 +0200
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /data/db from ta-mongodb (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-6b56p (ro)
+Conditions:
+  Type              Status
+  Initialized       True
+  Ready             True
+  ContainersReady   True
+  PodScheduled      True
+Volumes:
+  ta-text:
+    Type:        CephFS (a CephFS mount on the host that shares a pod's lifetime)
+    Monitors:    [132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10]
+    Path:        /home/stud/bernstetter/ta-crawler/ta-text
+    User:        studbernstetter
+    SecretFile:
+    SecretRef:   &LocalObjectReference{Name:ceph-secret-studbernstetter,}
+    ReadOnly:    false
+  ta-mongodb:
+    Type:        CephFS (a CephFS mount on the host that shares a pod's lifetime)
+    Monitors:    [132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10]
+    Path:        /home/stud/bernstetter/ta-crawler/ta-mongodb
+    User:        studbernstetter
+    SecretFile:
+    SecretRef:   &LocalObjectReference{Name:ceph-secret-studbernstetter,}
+    ReadOnly:    false
+  default-token-6b56p:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-6b56p
+    Optional:    false
+QoS Class:       BestEffort
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute for 300s
+                 node.kubernetes.io/unreachable:NoExecute for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  18m   default-scheduler  Successfully assigned studbernstetter/ta-crawler-7b8f86687c-474xb to orome
+  Normal  Pulling    18m   kubelet, orome     pulling image "gitlab2.informatik.uni-wuerzburg.de:4567/s319059/mprak_crawlers/ta_crawler"
+  Normal  Pulled     17m   kubelet, orome     Successfully pulled image "gitlab2.informatik.uni-wuerzburg.de:4567/s319059/mprak_crawlers/ta_crawler"
+  Normal  Created    17m   kubelet, orome     Created container
+  Normal  Started    17m   kubelet, orome     Started container
+  Normal  Pulling    17m   kubelet, orome     pulling image "mongo"
+  Normal  Pulled     17m   kubelet, orome     Successfully pulled image "mongo"
+  Normal  Created    17m   kubelet, orome     Created container
+  Normal  Started    17m   kubelet, orome     Started container

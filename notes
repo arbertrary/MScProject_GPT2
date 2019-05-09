@@ -41,7 +41,25 @@ https://gitlab2.informatik.uni-wuerzburg.de/s319059/mprak_crawlers/container_reg
 
 ## kubernetes deploy stuff
 
-see template.yml file
+- see template.yml file
+
+- gitlab deploy tokens: read registry
+
+- in vingilot:
+token -> secret erzeugen
+kubectl -n studbernstetter create secret docker-registry gitlab-registry --docker-server=gitlab2.informatik.uni-wuerzburg.de:4567 --docker-username=gitlab+deploy-token-12 --docker-password=<pwhere>
+
+secret name (gitlab-registry) in yaml file bei imagePullSecret
+
+kubectl apply -f ta-crawler/ta-crawler.yml
+
+kubectl delete -f ta-crawler/ta-crawler.yml
+kubectl -n studbernstetter get pods
+kubectl -n studbernstetter describe pods
+
+zugriff auf mongo bash
+kubectl -n studbernstetter exec -it ta-crawler-7b8f86687c-474xb -c ta-mongodb bash
+
 
 ## ssh
 Host login6

@@ -1,50 +1,50 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: ta_crawler
+  name: ta-crawler
   namespace: studbernstetter
   annotations:
-    description: "Deployment for a crawler for a large german web forum. \n Container ta_crawler crawls the Team-Andro forum, stores the posts as files and inserts them into a mongodb, container ta_mongodb starts a mongodb."
+    description: "Deployment for a crawler for a large german web forum. \n Container ta-crawler crawls the Team-Andro forum, stores the posts as files and inserts them into a mongodb, container ta-mongodb starts a mongodb."
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        name: ta_crawler
+        name: ta-crawler
     spec:
       containers:
         - resources:
-          name: ta_crawler
+          name: ta-crawler
           image: gitlab2.informatik.uni-wuerzburg.de:4567/s319059/mprak_crawlers/ta_crawler
           imagePullPolicy: Always
           volumeMounts:
             - mountPath: /ta_text #the path inside the container
-              name: ta_text
+              name: ta-text
         - resources:
-          name: ta_mongodb
+          name: ta-mongodb
           image: mongo # TODO: Ports? Will pymongo in the crawler find localhost:27017?
           ports:
             - containerPort: 27017
           volumeMounts:
             - mountPath: /data/db
-              name: ta_mongodb
+              name: ta-mongodb
           imagePullPolicy: Always
       volumes:
-        - name: ta_text
+        - name: ta-text
           cephfs:
             monitors:
               - 132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10
             user: studbernstetter
-            path: "/home/stud/bernstetter/ta_crawler/ta_text"
+            path: "/home/stud/bernstetter/ta-crawler/ta-text"
             secretRef:
               name: ceph-secret-studbernstetter
-        - name: ta_mongodb
+        - name: ta-mongodb
           cephfs:
             monitors:
               - 132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10
             user: studbernstetter
-            path: "/home/stud/bernstetter/ta_crawler/ta_mongodb"
+            path: "/home/stud/bernstetter/ta-crawler/ta-mongodb"
             secretRef:
               name: ceph-secret-studbernstetter
       imagePullSecrets:
-        - name: stud-registry
+        - name: gitlab-registry
