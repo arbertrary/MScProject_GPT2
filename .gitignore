@@ -1,6 +1,8 @@
 db/
 .idea/
-andro_sitemaps/
-andro_text/
 reddit_text/
 venv/
+ta-text/
+ta-sitemaps/
+ta-mongodb/
+ta-logs/

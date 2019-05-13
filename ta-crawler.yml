@@ -20,8 +20,12 @@ spec:
           image: gitlab2.informatik.uni-wuerzburg.de:4567/s319059/mprak_crawlers/ta_crawler
           imagePullPolicy: Always
           volumeMounts:
-            - mountPath: /ta_text #the path inside the container
+            - mountPath: /ta-text #the path inside the container
               name: ta-text
+            - mountPath: /ta-sitemaps
+              name: ta-sitemaps
+            - mountPath: /ta-logs
+              name: ta-logs
         - resources:
           name: ta-mongodb
           image: mongo # TODO: Ports? Will pymongo in the crawler find localhost:27017?
@@ -38,6 +42,22 @@ spec:
               - 132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10
             user: studbernstetter
             path: "/home/stud/bernstetter/ta-crawler/ta-text"
+            secretRef:
+              name: ceph-secret-studbernstetter
+        - name: ta-sitemaps
+          cephfs:
+            monitors:
+              - 132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10
+            user: studbernstetter
+            path: "/home/stud/bernstetter/ta-crawler/ta-sitemaps"
+            secretRef:
+              name: ceph-secret-studbernstetter
+        - name: ta-logs
+          cephfs:
+            monitors:
+              - 132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10
+            user: studbernstetter
+            path: "/home/stud/bernstetter/ta-crawler/ta-logs"
             secretRef:
               name: ceph-secret-studbernstetter
         - name: ta-mongodb

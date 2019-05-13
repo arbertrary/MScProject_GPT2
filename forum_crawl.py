@@ -14,8 +14,8 @@ def crawl_ta():
     myclient = pymongo.MongoClient("mongodb://localhost:27017/")
     db = myclient["ta_data"]
     coll = db["ta_posts"]
-    top_sitemap = "https://www.team-andro.com/sitemap-google.xml"
-    andro_sitemaps = read_sitemap(top_sitemap)
+    # top_sitemap = "https://www.team-andro.com/sitemap-google.xml"
+    # andro_sitemaps = read_sitemap(top_sitemap)
 
     for sitemap in andro_sitemaps:
         pages = read_sitemap(sitemap)
@@ -100,41 +100,32 @@ def get_forum_page(url):
     return meta_list
 
 
-# def read_sitemap_xml():
-#     for sitemap in os.listdir("andro_sitemaps"):
-#
-#         path = os.path.join("andro_sitemaps", sitemap)
-#         print(path)
-#
-#         with open(path) as xml:
-#             sitemap = BeautifulSoup(xml.read(), "lxml-xml")
-#             links = list(map(lambda x: x.getText(), sitemap.find_all("loc")))
-#
-#             for link in tqdm(links):
-#                 get_forum_page(link)
+def read_sitemap_xml():
+    for sitemap in os.listdir("andro_sitemaps"):
 
-# def get_all_andro_pages():
-#     top_sitemaps = read_sitemap("https://www.team-andro.com/sitemap-google.xml")
-#     all_sites = itertools.chain([read_sitemap(url) for url in top_sitemaps])
+        path = os.path.join("andro_sitemaps", sitemap)
+        print(path)
+
+        with open(path) as xml:
+            sitemap = BeautifulSoup(xml.read(), "lxml-xml")
+            links = list(map(lambda x: x.getText(), sitemap.find_all("loc")))
+
+            for link in tqdm(links):
+                get_forum_page(link)
 
 
-# def get_andro_sitemaps_as_files():
-#     top_sitemaps = read_sitemap("https://www.team-andro.com/sitemap-google.xml")
-#
-#     for sm in top_sitemaps:
-#         print(sm)
-#         filename = "andro_sitemaps/" + sm.split("/")[-1]
-#         text = requests.get(sm).text
-#         with open(filename, "w") as file:
-#             file.write(str(text))
+def get_andro_sitemaps_as_files():
+    top_sitemaps = read_sitemap("https://www.team-andro.com/sitemap-google.xml")
 
-
-# def create_folders():
-#     for file in os.listdir("andro_sitemaps"):
-#         name = os.path.splitext(file)[0]
-#         print(name)
-#         os.mkdir(os.path.join("andro_text", name))
+    for sm in top_sitemaps:
+        print(sm)
+        filename = "andro_sitemaps/" + sm.split("/")[-1]
+        text = requests.get(sm).text
+        with open(filename, "w") as file:
+            file.write(str(text))
 
 
 if __name__ == '__main__':
-    crawl_ta()
+    # crawl_ta()
+    # get_andro_sitemaps_as_files()
+    read_sitemap_xml()
