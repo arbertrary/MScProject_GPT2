@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import pymongo
 import time
 import random
+from tqdm import tqdm
 
 DIRS = ["ta-text", "ta-sitemaps", "ta-mongodb", "ta-logs"]
 TOP_SITEMAP = "https://www.team-andro.com/sitemap-google.xml"
@@ -44,7 +45,7 @@ def crawl_ta():
 
         # Iterate over page links in sitemap
         total = len(pages)
-        for i, page in enumerate(pages):
+        for i, page in enumerate(tqdm(pages)):
             if "phpBB3" not in page:
                 continue
 
@@ -57,8 +58,13 @@ def crawl_ta():
 
             # Error handling or writing to mongodb
             metadata = get_forum_page(page)
-            if isinstance(metadata, list):
-                x = coll.insert_many(metadata)
+            if isinstance(metadata, list) and len(metadata) != 0:
+                try:
+                    x = coll.insert_many(metadata)
+                except Exception as e:
+                    print("### Error at: " + page + "\n" + str(e))
+                    raise AttributeError
+
             elif isinstance(metadata, str):
                 print(metadata)
                 raise AttributeError("Error at sitemap: " + sitemap)
@@ -189,7 +195,7 @@ def get_andro_sitemaps_as_files():
 
 
 if __name__ == '__main__':
-    get_andro_sitemaps_as_files()
+    # get_andro_sitemaps_as_files()
     for ta_dir in DIRS:
         if not os.path.exists(ta_dir):
             os.makedirs(ta_dir)
