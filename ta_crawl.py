@@ -189,9 +189,8 @@ def get_andro_sitemaps_as_files():
 
 
 if __name__ == '__main__':
-    print(isinstance("test", list))
-    # get_andro_sitemaps_as_files()
-    # for ta_dir in DIRS:
-    #     if not os.path.exists(ta_dir):
-    #         os.makedirs(ta_dir)
-    # crawl_ta()
+    get_andro_sitemaps_as_files()
+    for ta_dir in DIRS:
+        if not os.path.exists(ta_dir):
+            os.makedirs(ta_dir)
+    crawl_ta()
