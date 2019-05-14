@@ -1,5 +1,3 @@
-ta-crawler:
-  yml:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -28,7 +26,7 @@ spec:
               name: ta-logs
         - resources:
           name: ta-mongodb
-          image: mongo # TODO: Ports? Will pymongo in the crawler find localhost:27017?
+          image: mongo
           ports:
             - containerPort: 27017
           volumeMounts:

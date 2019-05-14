@@ -6,36 +6,43 @@ import pymongo
 import time
 import random
 
+DIRS = ["ta-text", "ta-sitemaps", "ta-mongodb", "ta-logs"]
+TOP_SITEMAP = "https://www.team-andro.com/sitemap-google.xml"
 
-# get list of urls from sitemap here
-# https://www.team-andro.com/sitemap-google.xml
 
 def crawl_ta():
+    # Pymongo stuff
     myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-    db = myclient["ta_data"]
-    coll = db["ta_posts"]
+    db = myclient["ta-data"]
+    coll = db["ta-posts"]
 
-    # top_sitemap = "https://www.team-andro.com/sitemap-google.xml"
-    # andro_sitemaps = read_sitemap(top_sitemap)
+    # Get all sitemaps
     andro_sitemaps = list(map(lambda l: os.path.join("ta-sitemaps", l), os.listdir("ta-sitemaps")))
     random.shuffle(andro_sitemaps)
-    nr_sitemaps = len(andro_sitemaps)
+    total_sitemaps = len(andro_sitemaps)
+
+    # Create a logfile that remembers which sitemaps have already been completed
     sitemap_logfile = "ta-logs/sitemap-logs"
     open(sitemap_logfile, "a").close()
 
+    # Iterate over sitemaps
     for si, sitemap in enumerate(andro_sitemaps):
+
+        # Skip if sitemap has been completed
         with open(sitemap_logfile, "r+") as log:
             lines = log.readlines()
             if sitemap + "\n" in lines:
                 print("Skipping sitemap " + sitemap)
                 continue
 
-        print("Reading: " + sitemap + " (" + str(si) + " of " + str(nr_sitemaps) + ")")
+        # Processing sitemap
+        print("Reading: " + sitemap + " (" + str(si) + " of " + str(total_sitemaps) + ")")
         try:
             pages = read_sitemap_xml(sitemap)
         except FileNotFoundError:
             continue
 
+        # Iterate over page links in sitemap
         total = len(pages)
         for i, page in enumerate(pages):
             if "phpBB3" not in page:
@@ -43,10 +50,13 @@ def crawl_ta():
 
             if i % 20 == 0:
                 time.sleep(2)
+
+            # Progress
             if i % 1000 == 0:
                 print(str(i * 100 / total) + "% (" + str(i) + "/" + str(total) + " done)")
+
+            # Error handling or writing to mongodb
             metadata = get_forum_page(page)
-            print(type(metadata))
             if isinstance(metadata, list):
                 x = coll.insert_many(metadata)
             elif isinstance(metadata, str):
@@ -55,10 +65,12 @@ def crawl_ta():
             else:
                 continue
 
+        # Add sitemap to logfile if completed
         with open(sitemap_logfile, "a") as log:
             log.write(sitemap + "\n")
 
 
+# Get all page links from a xml file sitemap
 def read_sitemap_xml(xml_path):
     with open(xml_path) as xml:
         sitemap = BeautifulSoup(xml.read(), "lxml-xml")
@@ -66,6 +78,7 @@ def read_sitemap_xml(xml_path):
     return links
 
 
+# Get all page links from the sitemap online
 def read_sitemap(url):
     try:
         top_sitemap = requests.get(url)
@@ -79,12 +92,12 @@ def read_sitemap(url):
     return links
 
 
+# Read a single forum page
 def get_forum_page(url):
     try:
         text = requests.get(url).text
-    except requests.exceptions.ConnectionError:
-        print(url)
-        return
+    except Exception as e:
+        return "### Error at: " + url + "\n" + str(e)
 
     soup = BeautifulSoup(text, "html.parser")
 
@@ -111,8 +124,12 @@ def get_forum_page(url):
 
     meta_list = []
 
+    # Iterate over al posts in a page
     for post in posts:
-        post_id = post.get("id")
+        try:
+            post_id = post.get("id")
+        except Exception as e:
+            return "### Could not find post id at" + url + "\n" + str(e)
 
         filepath = os.path.join(path, post_id)
         if os.path.exists(filepath):
@@ -154,13 +171,15 @@ def get_forum_page(url):
     return meta_list
 
 
+# Download all sitemaps to folder
 def get_andro_sitemaps_as_files():
-    top_sitemaps = read_sitemap("https://www.team-andro.com/sitemap-google.xml")
+    top_sitemaps = read_sitemap(TOP_SITEMAP)
     sitemap_dir = "ta-sitemaps/"
     if not os.path.exists(sitemap_dir):
         os.makedirs(sitemap_dir)
 
     for sm in top_sitemaps:
+        time.sleep(2)
         print(sm)
         filename = sitemap_dir + sm.split("/")[-1]
         text = requests.get(sm).text
@@ -170,10 +189,9 @@ def get_andro_sitemaps_as_files():
 
 
 if __name__ == '__main__':
-    get_andro_sitemaps_as_files()
-    dirs = ["ta-text", "ta-sitemaps", "ta-mongodb", "ta-logs"]
-    for ta_dir in dirs:
-        if not os.path.exists(ta_dir):
-            os.makedirs(ta_dir)
-
-    crawl_ta()
+    print(isinstance("test", list))
+    # get_andro_sitemaps_as_files()
+    # for ta_dir in DIRS:
+    #     if not os.path.exists(ta_dir):
+    #         os.makedirs(ta_dir)
+    # crawl_ta()

@@ -71,3 +71,17 @@ Host vingilot
    HostName vingilot.informatik.uni-wuerzburg.de
    User studbernstetter
    ProxyCommand ssh login6 nc %h %p
+
+
+
+### Error at: https://www.team-andro.com/phpBB3/bankdruecken-enger-weiter-griff-t134131-45.html
+('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
+Traceback (most recent call last):
+  File "./ta_crawl.py", line 195, in <module>
+    crawl_ta()
+  File "./ta_crawl.py", line 64, in crawl_ta
+    raise AttributeError("Error at sitemap: " + sitemap)
+AttributeError: Error at sitemap: ta-sitemaps/sitemap-google45.xml
+
+
+admin: freischalten 132.187.14.*
