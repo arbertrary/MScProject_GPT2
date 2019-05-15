@@ -14,8 +14,8 @@ TOP_SITEMAP = "https://www.team-andro.com/sitemap-google.xml"
 def crawl_ta():
     # Pymongo stuff
     myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-    db = myclient["ta-data"]
-    coll = db["ta-posts"]
+    db = myclient["taData"]
+    coll = db["taPosts"]
 
     # Get all sitemaps
     andro_sitemaps = list(map(lambda l: os.path.join("ta-sitemaps", l), os.listdir("ta-sitemaps")))
@@ -49,8 +49,8 @@ def crawl_ta():
             if "phpBB3" not in page:
                 continue
 
-            if i % 20 == 0:
-                time.sleep(2)
+            if i % 10 == 0:
+                time.sleep(1)
 
             # Progress
             if i % 1000 == 0:
@@ -103,7 +103,8 @@ def get_forum_page(url):
     try:
         text = requests.get(url).text
     except Exception as e:
-        return "### Error at: " + url + "\n" + str(e)
+        time.sleep(1)
+        return "### Requests Error at: " + url + "\n" + str(e)
 
     soup = BeautifulSoup(text, "html.parser")
 
@@ -188,14 +189,19 @@ def get_andro_sitemaps_as_files():
         time.sleep(2)
         print(sm)
         filename = sitemap_dir + sm.split("/")[-1]
-        text = requests.get(sm).text
+        try:
+            text = requests.get(sm).text
+        except Exception as e:
+            print("### Requests Error at: " + sm + "\n" + str(e))
+            raise e
+
         if not os.path.exists(filename):
             with open(filename, "w") as file:
                 file.write(str(text))
 
 
 if __name__ == '__main__':
-    # get_andro_sitemaps_as_files()
+    get_andro_sitemaps_as_files()
     for ta_dir in DIRS:
         if not os.path.exists(ta_dir):
             os.makedirs(ta_dir)
