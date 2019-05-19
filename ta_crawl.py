@@ -7,8 +7,11 @@ import time
 import random
 from tqdm import tqdm
 
-DIRS = ["ta-text", "ta-sitemaps", "ta-mongodb", "ta-logs"]
+DIRS = ["ta-text", "ta-sitemaps", "ta-logs"]
 TOP_SITEMAP = "https://www.team-andro.com/sitemap-google.xml"
+requests_logfile = "ta-logs/requests-logs"
+sitemap_logfile = "ta-logs/sitemap-logs"
+error_logfile = "ta-logs/error-logs"
 
 
 def crawl_ta():
@@ -23,8 +26,9 @@ def crawl_ta():
     total_sitemaps = len(andro_sitemaps)
 
     # Create a logfile that remembers which sitemaps have already been completed
-    sitemap_logfile = "ta-logs/sitemap-logs"
     open(sitemap_logfile, "a").close()
+    open(error_logfile, "a").close()
+    open(requests_logfile, "a").close()
 
     # Iterate over sitemaps
     for si, sitemap in enumerate(andro_sitemaps):
@@ -45,7 +49,10 @@ def crawl_ta():
 
         # Iterate over page links in sitemap
         total = len(pages)
-        for i, page in enumerate(tqdm(pages)):
+        t = tqdm(pages)
+        t.set_postfix(sitemap=sitemap + " (" + str(si) + " of " + str(total_sitemaps) + "))")
+        for i, page in enumerate(t):
+
             if "phpBB3" not in page:
                 continue
 
@@ -53,8 +60,9 @@ def crawl_ta():
                 time.sleep(1)
 
             # Progress
-            if i % 1000 == 0:
-                print(str(i * 100 / total) + "% (" + str(i) + "/" + str(total) + " done)")
+            if i % 500 == 0:
+                print(str(i * 100 / total) + "% (" + str(i) + "/" + str(total) + " done of " + sitemap + " (" + str(
+                    si) + " of " + str(total_sitemaps) + "))")
 
             # Error handling or writing to mongodb
             metadata = get_forum_page(page)
@@ -62,12 +70,13 @@ def crawl_ta():
                 try:
                     x = coll.insert_many(metadata)
                 except Exception as e:
-                    print("### Error at: " + page + "\n" + str(e))
-                    raise AttributeError
-
+                    raise AttributeError("### Can't insert into mongodb. Error at: " + page + "\n" + str(e))
             elif isinstance(metadata, str):
                 print(metadata)
-                raise AttributeError("Error at sitemap: " + sitemap)
+                with open(error_logfile, "a") as f:
+                    f.write(metadata + "\n\n")
+                    f.write("Error at sitemap: " + sitemap + "\n\n")
+                    continue
             else:
                 continue
 
@@ -104,9 +113,15 @@ def get_forum_page(url):
         text = requests.get(url).text
     except Exception as e:
         time.sleep(1)
-        return "### Requests Error at: " + url + "\n" + str(e)
+        with open(requests_logfile, "a") as f:
+            f.write("### Requests Error at: " + url + "\n" + str(e) + "\n\n")
+        raise e
 
     soup = BeautifulSoup(text, "html.parser")
+    login = soup.body.findAll(
+        text="Um Beiträte in diesem Forum anzusehen, musst du auf diesem Board registriert und angemeldet sein.")
+    if login:
+        return
 
     m = re.search(r"-(t\d+)(-\d+)*.html", url)
     if m:
@@ -192,7 +207,8 @@ def get_andro_sitemaps_as_files():
         try:
             text = requests.get(sm).text
         except Exception as e:
-            print("### Requests Error at: " + sm + "\n" + str(e))
+            with open(requests_logfile, "a") as f:
+                f.write("### Requests Error at: " + sm + "\n" + str(e)+"\n\n")
             raise e
 
         if not os.path.exists(filename):
