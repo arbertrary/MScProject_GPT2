@@ -1,3 +1,7 @@
+GLAMDRING
+German LAnguage Model Dataset R??? trainING
+
+
 # Docker
 docker build -t andro_crawler . 
 
@@ -9,6 +13,24 @@ docker run -d -p 27017:27017 -v /<some path>:/data/db mongo
 -d = run as daemon
 -p host-port:internal-port
 -v host-vol:internal-vol
+
+
+## Gitlab Docker registry
+
+docker login gitlab2.informatik.uni-wuerzburg.de:4567
+docker build -t gitlab2.informatik.uni-wuerzburg.de:4567/s319059/mprak_crawlers .
+docker push gitlab2.informatik.uni-wuerzburg.de:4567/s319059/mprak_crawlers
+
+Use different image names
+
+GitLab supports up to 3 levels of image names. The following examples of images are valid for your project:
+
+gitlab2.informatik.uni-wuerzburg.de:4567/s319059/mprak_crawlers:tag
+gitlab2.informatik.uni-wuerzburg.de:4567/s319059/mprak_crawlers/optional-image-name:tag
+gitlab2.informatik.uni-wuerzburg.de:4567/s319059/mprak_crawlers/optional-name/optional-image-name:tag
+
+
+
 
 # Mongodb
 mongod --dbpath ./db/       # start server/daemon
@@ -72,16 +94,3 @@ Host vingilot
    User studbernstetter
    ProxyCommand ssh login6 nc %h %p
 
-
-
-### Error at: https://www.team-andro.com/phpBB3/bankdruecken-enger-weiter-griff-t134131-45.html
-('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
-Traceback (most recent call last):
-  File "./ta_crawl.py", line 195, in <module>
-    crawl_ta()
-  File "./ta_crawl.py", line 64, in crawl_ta
-    raise AttributeError("Error at sitemap: " + sitemap)
-AttributeError: Error at sitemap: ta-sitemaps/sitemap-google45.xml
-
-
-admin: freischalten 132.187.14.*

@@ -109,17 +109,17 @@ def read_sitemap(url):
 
 # Read a single forum page
 def get_forum_page(url):
-    try:
-        text = requests.get(url).text
-    except Exception as e:
-        time.sleep(1)
-        with open(requests_logfile, "a") as f:
-            f.write("### Requests Error at: " + url + "\n" + str(e) + "\n\n")
-        raise e
+    # try:
+    text = requests.get(url).text
+    # except Exception as e:
+    #     time.sleep(1)
+    #     with open(requests_logfile, "a") as f:
+    #         f.write("### Requests Error at: " + url + "\n" + str(e) + "\n\n")
+    #     raise e
 
     soup = BeautifulSoup(text, "html.parser")
     login = soup.body.findAll(
-        text="Um Beiträte in diesem Forum anzusehen, musst du auf diesem Board registriert und angemeldet sein.")
+        text="Um Beiträge in diesem Forum anzusehen, musst du auf diesem Board registriert und angemeldet sein.")
     if login:
         return
 
@@ -137,7 +137,8 @@ def get_forum_page(url):
         navlinks.append(thread_id)
         path = os.path.join("ta-text", *navlinks)
     except Exception as e:
-        return "### Error at: " + url + "\n" + str(e)
+        raise e
+        # return "### Error at: " + url + "\n" + str(e)
 
     if not os.path.exists(path):
         os.makedirs(path)
@@ -151,7 +152,8 @@ def get_forum_page(url):
         try:
             post_id = post.get("id")
         except Exception as e:
-            return "### Could not find post id at" + url + "\n" + str(e)
+            raise e
+            # return "### Could not find post id at" + url + "\n" + str(e)
 
         filepath = os.path.join(path, post_id)
         if os.path.exists(filepath):
@@ -162,7 +164,8 @@ def get_forum_page(url):
             user_block = post.find("a", href=re.compile(r"team-andro.com/my/.+-u\d+"))
             author_string = post.find("p", class_="author").getText()
         except Exception as e:
-            return "### Error at: " + url + "\n" + str(e)
+            raise e
+            # return "### Error at: " + url + "\n" + str(e)
 
         author_regex = r"von\s(.+)\s.\s(\d{2}\s\w{3}\s\d{4})\s(.+)\s"
         pattern = re.compile(author_regex)
@@ -217,8 +220,10 @@ def get_andro_sitemaps_as_files():
 
 
 if __name__ == '__main__':
-    get_andro_sitemaps_as_files()
-    for ta_dir in DIRS:
-        if not os.path.exists(ta_dir):
-            os.makedirs(ta_dir)
-    crawl_ta()
+    # get_andro_sitemaps_as_files()
+    # for ta_dir in DIRS:
+    #     if not os.path.exists(ta_dir):
+    #         os.makedirs(ta_dir)
+    # crawl_ta()
+    test =    get_forum_page("https://www.team-andro.com/phpBB3/ephedrin-einnahme-t185113.html")
+    # print(test)
