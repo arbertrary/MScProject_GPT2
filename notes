@@ -82,6 +82,10 @@ kubectl -n studbernstetter describe pods
 zugriff auf mongo bash
 kubectl -n studbernstetter exec -it ta-crawler-7b8f86687c-474xb -c ta-mongodb bash
 
+mongoexport --db taData --collection taPosts --type=csv --fields text --out /data/db/taPosts.csv
+
+
+split -b 50M --additional-suffix=.txt taPosts.csv ta_
 
 ## ssh
 Host login6
