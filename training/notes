@@ -1,0 +1,26 @@
+Team Andro forum posts dataset:
+- number of tokens: 441,625,066
+
+- clean text? e.g. remove "hat geschrieben" citations?
+  -> not part of the language model training
+
+- take posts and sent_tokenize each post. each sentence one line?
+  -> more or less. sent_tokenizing didn't work so well
+  -> done
+
+- get vocabulary? sorted descending by token count in training data
+  -> done
+  -> 42,623,202
+
+- split into train and heldout data
+- train only on ta data? or on both? or separate to compare?
+
+----
+Training ELMO on a new corpus:
+https://github.com/allenai/bilm-tf#training-a-bilm-on-a-new-corpus
+
+rest:
+- number of tokens: 1,162,305,636
+
+
+- total number of tokens: 1,603,930,702
