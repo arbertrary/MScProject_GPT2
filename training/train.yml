@@ -1,69 +1,42 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  namespace: zehe
-  name: gpt-german
+  namespace: studbernstetter
+  name: elmo-german
 spec:
   template:
     metadata:
-      name: gpt-german
+      name: elmo-german
     spec:
       containers:
-      - name: gpt-german
-        image: ls6-staff-registry.informatik.uni-wuerzburg.de/zehe-gpt2:v2
+      - name: elmo-german
+        image: gitlab2.informatik.uni-wuerzburg.de:4567/s319059/mprak/elmo
         imagePullPolicy: "Always"
         resources:
           limits:
-            #nvidia.com/gpu: "4"
+            nvidia.com/gpu: "1"
             cpu: "2"
             memory: "1Gi"
           requests:
-            #nvidia.com/gpu: "4"
+            nvidia.com/gpu: "1"
             cpu: "1"
             memory: "1Gi"
         volumeMounts:
-        - mountPath: "/home/ls6/zehe"
-          name: home
-        - mountPath: "/scratch"
-          name: scratch
-        - mountPath: "/datasets"
-          name: datasets
+        - mountPath: "/super_corpus"
+          name: corpus
+        command: ["bash", "-c", "python bin/train_elmo.py --train_prefix='/super_corpus/train/*' --vocab_file /super_corpus/super_vocabulary.txt --save_dir /super_corpus/output"]
         #command: ["sleep", "100000000"]
         #command: ["bash", "-c", "python3 datasets/openwebtext/create_tfrecords.py && python3 main.py --model 1.5B.json"]
-        command: ["bash", "-c", "python3 -u datasets/german/compile_dataset.py"]
+        #command: ["bash", "-c", "python3 -u datasets/german/compile_dataset.py"]
       restartPolicy: "OnFailure"
       imagePullSecrets:
-      - name: staff-registry
+      - name: gitlab-registry
       volumes:
-      - name: home
+      - name: corpus
         cephfs:
           monitors:
           - 132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10
-          user: zehe
-          path: "/home/ls6/zehe"
+          user: studbernstetter
+          path: "/home/stud/bernstetter/super_corpus/"
           secretRef:
-            name: ceph-secret-zehe
-      - name: scraped
-        cephfs:
-          monitors:
-          - 132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10
-          user: zehe
-          path: "/scratch/zehe/gpt-2/OpenWebText/scraped/"
-          secretRef:
-            name: ceph-secret-zehe
-      - name: scratch
-        cephfs:
-          monitors:
-          - 132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10
-          user: zehe
-          path: "/scratch"
-          secretRef:
-            name: ceph-secret-zehe
-      - name: datasets
-        cephfs:
-          monitors:
-          - 132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10
-          user: zehe
-          path: "/datasets"
-          secretRef:
-            name: ceph-secret-zehe
+            name: ceph-secret-studbernstetter
