@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ta-preprocess
+  namespace: studbernstetter
+  annotations:
+    description: "Preprocessing the ta textfiles"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: ta-preprocess
+    spec:
+      containers:
+        - resources:
+          name: ta-preprocess
+          image: gitlab2.informatik.uni-wuerzburg.de:4567/mprak_bernstetter/mprak_crawlers/ta_preprocess
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: /super_corpus #the path inside the container
+              name: ta-corpus
+      volumes:
+        - name: ta-corpus
+          cephfs:
+            monitors:
+              - 132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10
+            user: studbernstetter
+            path: "/home/stud/bernstetter/repos/mprak_remote/super_corpus"
+            secretRef:
+              name: ceph-secret-studbernstetter
+      imagePullSecrets:
+        - name: gitlab-registry
