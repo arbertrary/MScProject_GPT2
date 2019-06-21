@@ -1,69 +1,69 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-          namespace: zehe
-            name: gpt-german
-            spec:
-                      template:
-                                  metadata:
-                                                name: gpt-german
-                                                    spec:
-                                                                  containers:
-                                                                                - name: gpt-german
-                                                                                          image: ls6-staff-registry.informatik.uni-wuerzburg.de/zehe-gpt2:v2
-                                                                                                  imagePullPolicy: "Always"
-                                                                                                          resources:
-                                                                                                                            limits:
-                                                                                                                                                #nvidia.com/gpu: "4"
-                                                                                                                                                #            cpu: "2"
-                                                                                                                                                #                        memory: "1Gi"
-                                                                                                                                                #                                  requests:
-                                                                                                                                                #                                              #nvidia.com/gpu: "4"
-                                                                                                                                                #                                                          cpu: "1"
-                                                                                                                                                #                                                                      memory: "1Gi"
-                                                                                                                                                #                                                                              volumeMounts:
-                                                                                                                                                #                                                                                      - mountPath: "/home/ls6/zehe"
-                                                                                                                                                #                                                                                                name: home
-                                                                                                                                                #                                                                                                        - mountPath: "/scratch"
-                                                                                                                                                #                                                                                                                  name: scratch
-                                                                                                                                                #                                                                                                                          - mountPath: "/datasets"
-                                                                                                                                                #                                                                                                                                    name: datasets
-                                                                                                                                                #                                                                                                                                            #command: ["sleep", "100000000"]
-                                                                                                                                                #                                                                                                                                                    #command: ["bash", "-c", "python3 datasets/openwebtext/create_tfrecords.py && python3 main.py --model 1.5B.json"]
-                                                                                                                                                #                                                                                                                                                            command: ["bash", "-c", "python3 -u datasets/german/compile_dataset.py"]
-                                                                                                                                                #                                                                                                                                                                  restartPolicy: "OnFailure"
-                                                                                                                                                #                                                                                                                                                                        imagePullSecrets:
-                                                                                                                                                #                                                                                                                                                                              - name: staff-registry
-                                                                                                                                                #                                                                                                                                                                                    volumes:
-                                                                                                                                                #                                                                                                                                                                                          - name: home
-                                                                                                                                                #                                                                                                                                                                                                  cephfs:
-                                                                                                                                                #                                                                                                                                                                                                            monitors:
-                                                                                                                                                #                                                                                                                                                                                                                      - 132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10
-                                                                                                                                                #                                                                                                                                                                                                                                user: zehe
-                                                                                                                                                #                                                                                                                                                                                                                                          path: "/home/ls6/zehe"
-                                                                                                                                                #                                                                                                                                                                                                                                                    secretRef:
-                                                                                                                                                #                                                                                                                                                                                                                                                                name: ceph-secret-zehe
-                                                                                                                                                #                                                                                                                                                                                                                                                                      - name: scraped
-                                                                                                                                                #                                                                                                                                                                                                                                                                              cephfs:
-                                                                                                                                                #                                                                                                                                                                                                                                                                                        monitors:
-                                                                                                                                                #                                                                                                                                                                                                                                                                                                  - 132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10
-                                                                                                                                                #                                                                                                                                                                                                                                                                                                            user: zehe
-                                                                                                                                                #                                                                                                                                                                                                                                                                                                                      path: "/scratch/zehe/gpt-2/OpenWebText/scraped/"
-                                                                                                                                                #                                                                                                                                                                                                                                                                                                                                secretRef:
-                                                                                                                                                #                                                                                                                                                                                                                                                                                                                                            name: ceph-secret-zehe
-                                                                                                                                                #                                                                                                                                                                                                                                                                                                                                                  - name: scratch
-                                                                                                                                                #                                                                                                                                                                                                                                                                                                                                                          cephfs:
-                                                                                                                                                #                                                                                                                                                                                                                                                                                                                                                                    monitors:
-                                                                                                                                                #                                                                                                                                                                                                                                                                                                                                                                              - 132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10
-                                                                                                                                                #                                                                                                                                                                                                                                                                                                                                                                                        user: zehe
-                                                                                                                                                #                                                                                                                                                                                                                                                                                                                                                                                                  path: "/scratch"
-                                                                                                                                                #                                                                                                                                                                                                                                                                                                                                                                                                            secretRef:
-                                                                                                                                                #                                                                                                                                                                                                                                                                                                                                                                                                                        name: ceph-secret-zehe
-                                                                                                                                                #                                                                                                                                                                                                                                                                                                                                                                                                                              - name: datasets
-                                                                                                                                                #                                                                                                                                                                                                                                                                                                                                                                                                                                      cephfs:
-                                                                                                                                                #                                                                                                                                                                                                                                                                                                                                                                                                                                                monitors:
-                                                                                                                                                #                                                                                                                                                                                                                                                                                                                                                                                                                                                          - 132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10
-                                                                                                                                                #                                                                                                                                                                                                                                                                                                                                                                                                                                                                    user: zehe
-                                                                                                                                                #                                                                                                                                                                                                                                                                                                                                                                                                                                                                              path: "/datasets"
-                                                                                                                                                #                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        secretRef:
-                                                                                                                                                #                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    name: ceph-secret-zehe
+  namespace: zehe
+  name: gpt-german
+spec:
+  template:
+    metadata:
+      name: gpt-german
+    spec:
+      containers:
+      - name: gpt-german
+        image: ls6-staff-registry.informatik.uni-wuerzburg.de/zehe-gpt2:v2
+        imagePullPolicy: "Always"
+        resources:
+          limits:
+            #nvidia.com/gpu: "4"
+            cpu: "2"
+            memory: "1Gi"
+          requests:
+            #nvidia.com/gpu: "4"
+            cpu: "1"
+            memory: "1Gi"
+        volumeMounts:
+        - mountPath: "/home/ls6/zehe"
+          name: home
+        - mountPath: "/scratch"
+          name: scratch
+        - mountPath: "/datasets"
+          name: datasets
+        #command: ["sleep", "100000000"]
+        #command: ["bash", "-c", "python3 datasets/openwebtext/create_tfrecords.py && python3 main.py --model 1.5B.json"]
+        command: ["bash", "-c", "python3 -u datasets/german/compile_dataset.py"]
+      restartPolicy: "OnFailure"
+      imagePullSecrets:
+      - name: staff-registry
+      volumes:
+      - name: home
+        cephfs:
+          monitors:
+          - 132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10
+          user: zehe
+          path: "/home/ls6/zehe"
+          secretRef:
+            name: ceph-secret-zehe
+      - name: scraped
+        cephfs:
+          monitors:
+          - 132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10
+          user: zehe
+          path: "/scratch/zehe/gpt-2/OpenWebText/scraped/"
+          secretRef:
+            name: ceph-secret-zehe
+      - name: scratch
+        cephfs:
+          monitors:
+          - 132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10
+          user: zehe
+          path: "/scratch"
+          secretRef:
+            name: ceph-secret-zehe
+      - name: datasets
+        cephfs:
+          monitors:
+          - 132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10
+          user: zehe
+          path: "/datasets"
+          secretRef:
+            name: ceph-secret-zehe
