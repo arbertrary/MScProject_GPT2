@@ -18,8 +18,8 @@ docker run -d -p 27017:27017 -v /<some path>:/data/db mongo
 ## Gitlab Docker registry
 
 docker login gitlab2.informatik.uni-wuerzburg.de:4567
-docker build -t gitlab2.informatik.uni-wuerzburg.de:4567/s319059/mprak_crawlers .
-docker push gitlab2.informatik.uni-wuerzburg.de:4567/s319059/mprak_crawlers
+docker build -t gitlab2.informatik.uni-wuerzburg.de:4567/s319059/mprak .
+docker push gitlab2.informatik.uni-wuerzburg.de:4567/s319059/mprak
 
 Use different image names
 
