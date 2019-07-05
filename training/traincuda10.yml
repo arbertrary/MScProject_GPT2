@@ -2,15 +2,15 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   namespace: studbernstetter
-  name: elmo-german
+  name: elmo-germancuda10
 spec:
   template:
     metadata:
-      name: elmo-german
+      name: elmo-germancuda10
     spec:
       containers:
-      - name: elmo-german
-        image: gitlab2.informatik.uni-wuerzburg.de:4567/s319059/mprak/bilmtf
+      - name: elmo-germancuda10
+        image: gitlab2.informatik.uni-wuerzburg.de:4567/s319059/mprak/bilmtfcuda10
         imagePullPolicy: "Always"
         resources:
           limits:
@@ -25,7 +25,7 @@ spec:
         - mountPath: "/super_corpus"
           name: corpus
           #command: ["bash", "-c", "python bin/stuff.py"]
-        command: ["bash", "-c", "python3 bin/train_elmo.py --train_prefix=\"/super_corpus/train/*\" --vocab_file /super_corpus/vocab/xaa --save_dir /super_corpus/output"]
+        command: ["bash", "-c", "python3 bin/train_elmo.py --train_prefix=\"/super_corpus/train/*\" --vocab_file /super_corpus/vocab/xaa --save_dir /super_corpus/outputcuda10"]
         #command: ["sleep", "100000000"]
         #command: ["bash", "-c", "python3 datasets/openwebtext/create_tfrecords.py && python3 main.py --model 1.5B.json"]
         #command: ["bash", "-c", "python3 -u datasets/german/compile_dataset.py"]

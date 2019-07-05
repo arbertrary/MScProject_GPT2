@@ -2,15 +2,15 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   namespace: studbernstetter
-  name: elmo-german
+  name: evalminimal
 spec:
   template:
     metadata:
-      name: elmo-german
+      name: evalminimal
     spec:
       containers:
-      - name: elmo-german
-        image: gitlab2.informatik.uni-wuerzburg.de:4567/s319059/mprak/bilmtf
+      - name: evalminimal
+        image: gitlab2.informatik.uni-wuerzburg.de:4567/s319059/mprak/bilmtfminimal
         imagePullPolicy: "Always"
         resources:
           limits:
@@ -22,13 +22,10 @@ spec:
             cpu: "1"
             memory: "32Gi"
         volumeMounts:
-        - mountPath: "/super_corpus"
+        - mountPath: "/minimal_corpus"
           name: corpus
-          #command: ["bash", "-c", "python bin/stuff.py"]
-        command: ["bash", "-c", "python3 bin/train_elmo.py --train_prefix=\"/super_corpus/train/*\" --vocab_file /super_corpus/vocab/xaa --save_dir /super_corpus/output"]
-        #command: ["sleep", "100000000"]
+        command: ["bash", "-c", "python3 bin/run_test.py --test_prefix=\"/minimal_corpus/heldout/*\" --vocab_file /minimal_corpus/min_vocab.txt --save_dir /minimal_corpus/outputcopy"]
         #command: ["bash", "-c", "python3 datasets/openwebtext/create_tfrecords.py && python3 main.py --model 1.5B.json"]
-        #command: ["bash", "-c", "python3 -u datasets/german/compile_dataset.py"]
       restartPolicy: "OnFailure"
       imagePullSecrets:
       - name: gitlab-registry
@@ -38,6 +35,6 @@ spec:
           monitors:
           - 132.187.14.5,132.187.14.6,132.187.14.7,132.187.14.8,132.187.14.10
           user: studbernstetter
-          path: "/home/stud/bernstetter/super_corpus/"
+          path: "/home/stud/bernstetter/minimal_corpus/"
           secretRef:
             name: ceph-secret-studbernstetter
