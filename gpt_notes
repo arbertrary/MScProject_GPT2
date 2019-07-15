@@ -9,3 +9,37 @@ other repo: https://github.com/ConnorJL/GPT2
 official gpt2 repo: https://github.com/openai/gpt-2/blob/master/DEVELOPERS.md
 
 https://medium.com/@ngwaifoong92/beginners-guide-to-retrain-gpt-2-117m-to-generate-custom-text-content-8bb5363d8b7f
+
+
+- check what exactly the batch size influences
+- check how much text gpt sees in each step
+- x_every=N means every N steps but does that mean every batch?
+- hparams of model:
+
+```
+def default_hparams():
+    return HParams(
+        n_vocab=0,
+        n_ctx=1024,
+        n_embd=768,
+        n_head=12,
+        n_layer=12,
+    )
+```
+- each batch= one token + context of 1024 tokens?
+
+
+# Training the entire dataset:
+
+## Parameters:
+
+--model_name 345M
+--dataset super_corpus/train
+--batch_size ???
+--sample_every 1000
+--val_dataset super_corpus/heldout
+--val_every 200
+
+for 345M: use sgd instead
+--optimizer sgd
+--learning_rate 0.0006

@@ -1,0 +1,135 @@
+# Command
+
+in gpt-2 
+
+python src/interactive_conditional_samples.py --top_k 40 --temperature 0.9 --seed 2000 --model_name custom345M
+
+# With pretrained 117M model-171000 (training on two 50mb text files)
+
+Model prompt >>> Ich trainiere meistens zweimal pro Woche mit einem Ganzkörperplan. Ich mache Bankdrücken und
+======================================== SAMPLE 1 ========================================
+ Schrägbankdrücken, aber die Übungen vor den anderen Sätzen sind gut.
+"Hab mich wieder verschrieben..
+Gibt es eigentlich irgendwelche sinnvolle Beiträge zu dem Thema?
+Die Tatsache, daß der kritische Mensch, daß der Dichter und Dichter aus echt nichts darstellt, sich wohl nur im Mittelhochdeutsch zu erwartende und jedesmal gewöhnliche System, niemals ausgesprochen entscheidende Gefühle zusammenfaßt, wie nach dem ersten Werk als Künstler verstanden werden muß, wie aus seiner Erscheinung weltweisen, aus der Zeit vor der Geschichte der alten Dichtung hervorgegangen erscheine, was nicht nur der Mensch als seinem Leben als göttliches Weltbild und auch der Welt und der Weltseele wirklich gewachsen ist, sondern sie ist seltsam, d. h. aus ihn in der Menschlichkeit.
+Das war es!
+Hab grad nen schönes Wochenende mit dem Arzt zu reden, weil er es zu guten Zeiten finden wollte.
+Ich wollte mal fragen ob hier jemand sich nachfragen lässt.
+Wenn die Wirkung des ästhetischen Erlebens der Wahrheit nicht einfach versteht, so schreibt er durch den Wechsel der Wahrheit (und kann hier nicht aus dem Ganzen der Wahrheit verwechselt werden): der Wahrheit ist nicht eigentlich Dämonischen, sich erst nachdem er zu übersehen ist.
+
+"Die Behandlungen haben vorweiter ausgereift, wieso so die B
+================================================================================
+Model prompt >>> I don't know any English anymore. I wish that I had learned more of
+======================================== SAMPLE 1 ========================================
+ English than I did the first time I had it at a school, or that I did; and I will not give a damn if I don't get it fixed.
+Es zeigt sich, daß die „dreißiger“, scharfer, dritter und dritter Untergründung der „zweiten und dritten Strophe“ den Vorteil für sich sei, ja sogar, daß „das öffentliche und rätselhaft geformte Leben des Lebens ist, auch in diesem Leben der ewige Ewige“ und die ewige Heiterkeit des Lebens, auch ein Diktator der Dinge des Lebens“ — nicht mehr kommt hier vor uns an allen dreißiger und ahnungslosen Beziehungen zum Durchbruch;  die ewige Heiterkeit des Lebens.
+Die Vollendung des »Märchens« wird also nicht als ein gewandter Vollstrecker und mit der Gattung die »Schwellung« des »Götz« zur »Schwere« (und mit der Gattung in die »Helden«), sondern, weil die Zahl zu ihrer Vollendung selbst zum »Götz« und zur »Schwellung« (und zur »Form«).
+Sie hatte sich aus seiner Lebensgeschichte abgewandelt und hatte ihn für die Erkenntnis der Begriffe der Kultur, der Gattung und der Dichtung und mit ihrem eigenen, von sich geschlossene Erkenntnis getragenen Aufweise aus ihrer eigenen geistlichen Geistlichkeit gehemmt, das sie vor seinen eigenen, überkommenen, sich selbst selbst und derselben Wissenschaft als eine von der Wissenschaft verlassene Verkettung verfehlt.
+A
+================================================================================
+
+
+# With pretrained 345M model-48000 (training on entire super_corpus)
+
+Model prompt >>> Ich trainiere meistens mit einem Ganzkörperplan zweimal pro Woche. Ich mache Bankdrücken und
+======================================== SAMPLE 1 ========================================
+ Dips, ich muss gerne mal die Beine machen.
+Bauch das Gewicht sehr gut und ich denke, es gibt hier nur Leute wie anderen Leuten im Gym, die sich mal schwer machen und zu wissen, dass ich mir dieses Jahr gesehen habe und ich mich nochmal vor den Sätzen trainiere.
+Beine sind echt günstiger als Zughilfen und haben jetzt alles, was meine Arme kontrolliert.
+Schultern waren durch ein Bauch und Hams gewissermaßen eine halbe Stunde gewesen.
+Jetzt müssen sie meine Runde nicht auf dem Gewicht machen, wollte aber nicht mehr kurz drauf ausgeben.
+Aber zweit: Wenn du das Gewicht auf dem Gewicht schüttest, ist die Wahl zu wenig.
+Zughilfen möchte ich mir wohl sehr gut essen
+ich nehme mal ab wieder 2 mal die woche und meine trainingserfahrung is hier das ich mich jetzt fühlt echt danken!
+!mistery hat am 10 Jun 2018 07:13 geschrieben:Da hält man keinen einzig und dass ich mir sie hoffentlich nicht gehört habe, gewicht nur eine kurzfristigere wdh mehr als einen kfa zu machen und mit 3 wdh und meiner wdh dann ab und zu gehen zb.
+das kannst du dann auch sehr schön halten oder?
+Jedoch liegt es ein wenig wesentlich.
+Hab ich einfach ein gutes besser wie eine Beine trainiert und es soll sich mit einem GK plan ändern.
+Und wenn du sie das ganze auf der Woche
+================================================================================
+Model prompt >>> I don't know any English anymore. I wish that I had learned more of
+======================================== SAMPLE 1 ========================================
+ it.
+I wish I had read all the books and journals, of course, but I have never read them.
+I don't know enough English to understand what's happening in the rest of the world.
+I don't know enough English to be able to know what's happening in the rest of the world.
+I have had too many people tell me, "Oh, you've lived in America?
+You must live in America," I love that, I love that.
+There's really a lot I want to say, but I'll tell you this.
+I've had enough of this.
+I've had enough of these.
+I have worked a hard life for these.
+Not a few of them.
+I've been fortunate enough to have gotten to where I am.
+I've seen the best of the best of the best.
+I've seen how hard their work is, and still they make it to the top and still they don't quit.
+They've won their championship.
+They've had to have the same kind of work ethic and still they don't quit.
+I just worked hard to make the kind of money that's meant to last.
+I have no regrets here.
+I have worked hard for the last 15 years and still not to the top.
+I still feel that I'm not in a position to earn the kind of money I want to be able to get.
+I can't afford to work on a boat, I can't afford to have a little girl working in my office.
+I just can't do what I want to do if I have to work on a boat in a foreign country where they make the best bread in the world.
+I just can't afford to do things that are just stupid and you're working because you can get more money because your wife has to go to work.
+That's dumb.
+You can't do that.
+It's dumb.
+You can't do that.
+You just can't.
+I'm sorry to anyone who's ever had to work hard to get what they wanted, because they just can't get it.
+I'm sorry for your kids.
+I'm sorry for your parents.
+I'm sorry for your people.
+I'd like to be a part of helping you achieve your dreams. That's what I work for every day, but I'm not part of your dreams. That's what I work for every day, but I am not part
+================================================================================
+
+===============================================================================
+Model prompt >>> Goethe war ein bekannter Autor. Er verfasste unter anderem Faust und
+======================================== SAMPLE 1 ========================================
+ Erzählungen eines russisch-deutsche Buchhandels, seit 1933 dann das Verlag W. R.
+Rote Taschen und verfasste nie viele Jahre zum Lebensraum Gebiete.
+Am 14. Oktober 1884 zog er ein, um dessen letzte Einweihung und Anstellung zu dienen.
+1890 erfolgte ein ausgeprägtes Schirm.
+1904 wurde er Mitglied der Wirtschaft.
+Er lehnte jedoch bereit, gegen die Verfahren, um das Verständnis zwischen die Reisende nicht zu rechnen.
+Im Laufe der deutschen Wirtschaftslage zog er auf selbstgerechtliche und unmittelbare Gegenseite nach Deutschland, wo er aus der Stadt zunehmend wie gegen eine Verbindlichkeit der Schweiz auslöste und die Errichtung der Dichter in seiner Lebensreife und zugleich zu einer zweiten Gesamtschiffe mitgebracht wurde.
+Er füllte sich auch nicht den Krieg über ihre Lebensfragen.
+Nach diesen Worten wuchs wieder schon zwei Jahre vor seinem Tod.
+1897 wurde er zum Vatersbürger gewidmet.
+Anschließend wurde er als einer der wissenschaftlichen Entwicklungsländer der deutschen Bauern abgelöste.
+Auf der Durchschnittslokale schied er vor, die das Lebenswirtschaftskreuz selbst wissenschaftlicher Entwicklung zu verschärfen.
+Im Jahre 1935 diente er nach dem Deutschen Akademiensche Ingenieurstudium am Oberösterreichisch-Lüneburg Universität.
+1940 entdeck
+================================================================================
+
+
+# Only OpenAI 345M model without custom dataset
+recognizes german but no real reference to training also not really quality text
+
+Model prompt >>> Ich trainiere meistens zweimal pro Woche mit einem Ganzkörperplan. Ich mache Bankdrücken und
+======================================== SAMPLE 1 ========================================
+ sie sicher an, um der Veränderungsmesslichen wirklich sich konnte ist zu befindlich, um aber durch einmal einige Woche können. Ich wird die Bankdrücken und sie kurz gelt, um mit der Veränderungsmesslichen konnte schon nicht kommen.
+
+Die Bankstreit und Schulde in zugemäßigten Beobachten von der Landeszeigen und der Veränderungsmesslichen seit geschrieben. Die Schulde über den und da die Veränderungsmesslichen gessig der Gegenwart dann, da ist kann die Gegenwart auf den Wachs zu geschehen.
+
+Die Schulde für die Vollziehung und den Vollerziesen vielen Vortrag der Landeszubung von den Schulde aus dem Schuld einer der Landeszeigen des Schulde durch zu befindlich, da ihr den Vollsiehung eine Veränderungsmesslichen im Veränderungsköpfer, da ihr der Vollerziesen der Vollziehung zu gleich.
+
+Gestärdende bei den Veränderungsmesslichen, wenn man sind sie den Versuch oder kannst du garantischen Veränderungskollzählich aus dem Versuch oder garantissimmen zu recht, welcher kann der vergleichenden Vollziehung und verloren der vergleichenden Schulde bekannt. Auch die Veränderungsmesslichen des Königs der Welt, dass die Vollziehung in das Veränderungskoll zwei Gegenweise der Veränderungskoll zu einem Gegenweise auf den Vollziehung.
+
+Geschrieben und ihn würdig ihn, mit der Gegenweise der Veränderungskoll sind ihre Vollziehung darüber dass
+================================================================================
+
+Model prompt >>> Goethe war ein bekannter Autor. Er verfasste unter anderem Faust und
+======================================== SAMPLE 1 ========================================
+ die einige Schrift zu bekommt. Die schriftlich eine Mädchen in einem Erzeitung bei den Schimmel und die Erzgegeben sind. Ihnen die erste Mädchen erstellt. Erweiterte die dem Schimmel verhält, dass dem Faust und die Erzgegeben sind. Für mehr ein Höhe in dem einem Erzeitung fotografieren. Und die erste Mädchen übersetzte erfolgende muss, dass er zum Natur in einen höhe nicht geben eine mædchen gesehen, so als die Faust dieser. Das Ihnen des Mädchen möglich die eine Mädchen sind nicht zu bestehende Schulen für die Ihnen der Erzeitung und die Erzeitung mit einem Kosten der Abteilung schlagen, wenn die Erzeitung von dieser Erzeitung sind, so die Faust die die Kosten der Abteilung sind sind. Denn die Faust die Kosten der Abteilung sind im Ihnen der schulen aufgelehrt in einem einem kosten eine Schrift gegen die Faust ist. Die Faust selbst ein gesetzt, wenn ihm aus dem Faust in den Erzeitung nicht zu bestehende Schulen gesetzt. Das für die schriftliche Schimmel des Erzeitung sind auch in einem Erzeitung nicht zu bestehen Schulen gefunden. The mittelstand Faust erklärt, die öffentliche Schimmel die erzeitungsfrage, zu haben den Erzgegeben wird, wie als und das Erzeitung nicht zu bestehen Schulen könnte. Die erzeitungsfrage für Faust gegen das die Faust erste Kosten der abteilung nicht könnte, dass der Kosten
+================================================================================
+
+
+
+English prompt: a story about Kirillov from Demons by Dostoevsky
+
+
+
+
+
