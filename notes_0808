@@ -1,0 +1,6 @@
+- Neuen minimal corpus erstellen
+- 117m und 345m mit bestehendem docker container trainieren zum vergleichen
+
+- nshepperd gpt2 code verstehen
+- Connor gpt2 code verstehen + überlegen, ob es sinnvoll ist, das repo zu verwenden
+--> evtl mal ohne docker laufen lassen und testen
