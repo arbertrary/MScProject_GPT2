@@ -31,3 +31,19 @@
 │   ├── super345M
 │   └── superElmo
 ```
+
+## Generate Samples from the gpt2 models
+
+The gpt2 models in `models/` can directly be used for sample generation using e.g. the script in `nshepperd/gpt-2/src/interactive_conditional_samples.py`.
+
+- Move the model into `nshepperd/gpt-2/models`
+- Obviously make sure all Python requirements are installed
+- Call e.g. `python src/interactive_conditional_samples.py --top_k 40 --temperature 0.9 --seed 2000 --model_name super345M`
+(for the different options see their documentation/code)
+- Wait
+- Enter your model prompt text
+- Wait
+- Enjoy your generated text sample
+
+
+
