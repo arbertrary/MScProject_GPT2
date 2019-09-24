@@ -1,0 +1,119 @@
+\documentclass[sigconf,natbib=false]{acmart}
+
+%%%%%%%%
+% Packages
+%%%%%%%%
+
+\usepackage[backend=biber]{biblatex}
+
+% Filter warnings issued by package biblatex starting with "Patching footnotes failed"
+% Source: https://tex.stackexchange.com/questions/202988/beamer-patching-footnotes-warning-patching-footnotes-failed-footnote-detectio
+\usepackage{silence}
+\WarningFilter{biblatex}{Patching footnotes failed}
+
+% For formal tables
+\usepackage{booktabs} 
+
+% Hyperref for formatting urls via the \url{} command.
+% Should be loaded last, but before cleverref:
+\usepackage{hyperref}
+
+% For automatic reference type labelling.
+% For example: for a figure with \label{fig:figure1}, \Cref{fig:figure1} will print ``Figure 1''.
+% !loaded last due to hyperref!
+\usepackage{cleveref}
+
+
+%%%%%%%%
+% Remove copyright
+%%%%%%%%
+\setcopyright{none}
+\settopmatter{printacmref=false}
+\acmISBN{} % set this to remove ISBN
+\acmDOI{} % set this to remove DOI
+
+
+%%%%%%%%
+% Meta information
+%%%%%%%%
+\acmConference[]
+	{Seminar: Ausgew\"ahlte Themen des Machine Learning}
+	{WS \the\year}
+
+
+%%%%%%%%
+% Bibliography sources
+%%%%%%%%
+
+% * you can use a remote bibliography from BibSonomy (change 'dmir' to your own username)
+%\addbibresource[location=remote]{http://www.bibsonomy.org/bib/user/dmir/myown}
+
+% * or a local file
+\addbibresource{bibliography.bib}
+
+
+
+\begin{document}
+
+%%%%%%%%
+% Front matter
+%%%%%%%%
+
+\title{Title of the Seminar Paper}
+\subtitle{An optional subtitle}
+
+\author{Your Name}
+\affiliation{%
+  \institution{University of W\"urzburg}
+}
+% \email{trovato@corporation.com}
+
+
+\begin{abstract}
+The abstract should be a short, stand-alone summary of the paper.
+It should cover the purpose, problems, methods, results, and conclusion
+of your paper.\\
+Length estimate:  1/3  column
+\end{abstract}
+
+
+%%%%%%%%
+% Content
+%%%%%%%%
+
+\maketitle
+
+\section{Introduction}
+
+
+
+
+\section{Basics}
+Often you will need to explain some basic terms or definitions
+before you can start telling about the fancy new solution you found.
+So it might be a good idea to include a section covering your basics.
+Use subsections to structure explanations for different key concepts.\\
+Lenght estimate: Up to 3 columns
+\section{Method 1}
+Now you should introduce and explain the method from the selected work. You could for example make subsections about the algorithm, the experimental setup and the evaluation. 
+Make sure that formulas have consistent naming and that all variables
+are explained. It might be helpful to include some figures (e.g.
+if you are explaining a neural network with a lot of components).
+Make sure you give the information about the used dataset(s) as well as the used metrics, so results can be interpreted properly.\\
+Lenght estimate: 3-4 columns
+
+\section{Method 2}
+As you will have to present an additional method, improved version or a transfer to another domain you should use a seperate section. Here it is. \\
+Lenght estimate: 3-4 columns
+
+\section{Conclusion}
+In the conclusion it is time to reflect about your findings. How well do your methods solve the problems and challenges given in the introduction? What is the impact of the work for the research area and how has the perspective about it changed?\\
+	The structure of your paper depends a lot on the actual work and
+methods you want to include, so don't follow these instructions blindly, but think about how you can introduce and explain your topic in a logical order and with a clear structure. \\
+Lenght estimate: 3-4 columns
+
+\section{Literature}
+You should have 10 citations from peer reviewed papers and/or books. \\
+Lenght estimate: 1/2 column
+
+\end{document}

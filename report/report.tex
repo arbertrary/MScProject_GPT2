@@ -1,0 +1,142 @@
+\documentclass[sigconf,natbib=false]{acmart}
+
+%%%%%%%%
+% Packages
+%%%%%%%%
+
+\usepackage[backend=biber]{biblatex}
+
+% Filter warnings issued by package biblatex starting with "Patching footnotes failed"
+% Source: https://tex.stackexchange.com/questions/202988/beamer-patching-footnotes-warning-patching-footnotes-failed-footnote-detectio
+\usepackage{silence}
+\WarningFilter{biblatex}{Patching footnotes failed}
+
+% For formal tables
+\usepackage{booktabs} 
+
+% Hyperref for formatting urls via the \url{} command.
+% Should be loaded last, but before cleverref:
+\usepackage{hyperref}
+
+% For automatic reference type labelling.
+% For example: for a figure with \label{fig:figure1}, \Cref{fig:figure1} will print ``Figure 1''.
+% !loaded last due to hyperref!
+\usepackage{cleveref}
+
+
+%%%%%%%%
+% Remove copyright
+%%%%%%%%
+\setcopyright{none}
+\settopmatter{printacmref=false}
+\acmISBN{} % set this to remove ISBN
+\acmDOI{} % set this to remove DOI
+
+
+%%%%%%%%
+% Meta information
+%%%%%%%%
+\acmConference[]
+	{Seminar: Ausgew\"ahlte Themen des Machine Learning}
+	{WS \the\year}
+
+
+%%%%%%%%
+% Bibliography sources
+%%%%%%%%
+
+% * you can use a remote bibliography from BibSonomy (change 'dmir' to your own username)
+%\addbibresource[location=remote]{http://www.bibsonomy.org/bib/user/dmir/myown}
+
+% * or a local file
+\addbibresource{bibliography.bib}
+
+
+
+\begin{document}
+
+%%%%%%%%
+% Front matter
+%%%%%%%%
+
+\title{Bericht Masterpraktikum}
+%\subtitle{An optional subtitle}
+
+\author{Armin Bernstetter}
+\affiliation{%
+  \institution{University of W\"urzburg}
+  \today
+}
+% \email{trovato@corporation.com}
+
+
+\begin{abstract}
+This report is a summary of the 
+\end{abstract}
+
+
+%%%%%%%%
+% Content
+%%%%%%%%
+
+\maketitle
+
+\section{Introduction/Motivation}
+
+\begin{itemize}
+	\item dataset erweitern
+	\item language model
+\end{itemize}
+
+
+\section{Crawler}
+
+\begin{itemize}
+	\item welche seiten kamen infrage (reddit, TA)
+	\item wo lagen probleme beim crawlen?
+	\item Was ist team andro
+	\item wie ging der crawler vor
+\end{itemize}
+
+\section{The Dataset}
+
+\begin{itemize}
+	\item der bestehende super corpus
+	\item Der neue Team Andro Corpus
+\end{itemize}
+
+\section{Elmo}
+
+\begin{itemize}
+	\item Visualisierte elmo embeddings? TODO
+\end{itemize}
+
+\section{Gpt-2}
+
+\begin{itemize}
+	\item Welche implementierung und warum?
+	\item der blog post mit den gedichten
+	\item welche modelle kamen raus
+	\item Fragen und Zweifel/Probleme. Undurchsichtige Trainingsskripte usw
+	\item sample output und interactive prompt samples
+\end{itemize}
+
+
+
+\section{What could have gone better? Future Work}
+
+\begin{itemize}
+	\item not depend so much on existing repositories/forks 
+	\item rather implement own training scripts for gpt2?
+	
+\end{itemize}
+
+
+ 
+%\input{content/introduction}
+%\input{content/othercontent}
+%\input{content/conclusion}
+
+\printbibliography
+
+\end{document}
