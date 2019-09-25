@@ -13,16 +13,10 @@
 
 % For formal tables
 \usepackage{booktabs} 
-
-% Hyperref for formatting urls via the \url{} command.
-% Should be loaded last, but before cleverref:
 \usepackage{hyperref}
-
-% For automatic reference type labelling.
-% For example: for a figure with \label{fig:figure1}, \Cref{fig:figure1} will print ``Figure 1''.
-% !loaded last due to hyperref!
 \usepackage{cleveref}
 
+\usepackage{csquotes}
 
 %%%%%%%%
 % Remove copyright
@@ -37,8 +31,8 @@
 % Meta information
 %%%%%%%%
 \acmConference[]
-	{Seminar: Ausgew\"ahlte Themen des Machine Learning}
-	{WS \the\year}
+	{Masterpraktikum Lehrstuhl X}
+	{SoSe \the\year}
 
 
 %%%%%%%%
@@ -83,6 +77,10 @@ This report is a summary of the
 
 \section{Introduction/Motivation}
 
+The general task of this project was to expand a corpus of german text and then train language models on this corpus.
+
+This was based on the success of OpenAI's GPT-2 project which trained a language model on 40gb of english web text. The model was so successful in tasks such as text generation that OpenAI refused to release the training code and the entire model out of ethical reasons. The concern was that malicious parties could use GPT-2 to generate e.g. fake news for their own good.
+
 \begin{itemize}
 	\item dataset erweitern
 	\item language model
@@ -91,14 +89,33 @@ This report is a summary of the
 
 \section{Crawler}
 
-\begin{itemize}
-	\item welche seiten kamen infrage (reddit, TA)
-	\item wo lagen probleme beim crawlen?
-	\item Was ist team andro
-	\item wie ging der crawler vor
-\end{itemize}
+Several available german text corpora were already included in the existing corpus. This included the german Wikipedia and novels. 
+
+Crawling the web or rather specific pages for german text is a good way to get new text data.
+
+
+\paragraph{Reddit}
+Pages that were considered initially were german subreddits on Reddit. This includes subreddits such as \textbf{reddit.com/r/de} or \textbf{reddit.com/r/de\_iama}. Reddit's API unfortunately limits the amount of requests a script can make and would have required a workaround repeatedly requesting new tokens etc.
+
+For future work it could make sense to look into \url{https://pushshift.io/} which offers a number of Reddit data dumps, mostly from some years ago.
+
+\paragraph{Wattpad}
+
+Another page that was considered briefly was Wattpad \url{https://www.wattpad.com/}, a \enquote{social storytelling} platform. Users can share their own stories there and read those of other users. Upon examination of the web page's structure it was decided that Wattpad are not keen on users crawling their site. Therefore Wattpad was dismissed as well.
+
+\paragraph{Team Andro} The website Team Andro \url{https://www.team-andro.com/} is a german Bodybuilding and weightlifting page. It contains articles on training, nutrition, events and more. More importantly, however, it is accompanied by a large german web forum with a user count of almost 300.000 and around 10 million forum posts in total (last checked 2019-09-25).
+
+Upon inquiry the site administrator provided some advice and a link to Team-Andro's sitemap which allowed to iterate through most of the forum's publicly available HTML pages.
+
+These pages were then parsed from HTML and saved in a directory structure representing the forum structure of Team Andro with each post represented as one text file. Additionally, meta data such as user names, time stamps etc were saved in a mongoDB database.
+
 
 \section{The Dataset}
+
+Prior to the addition of the Team-Andro text data, the existing corpus consisted of ... TODO
+
+
+The Team-Andro corpus consists of mostly german web text. As such it is often unstructured, meaningless text without contiguous sentences. 
 
 \begin{itemize}
 	\item der bestehende super corpus
@@ -113,6 +130,10 @@ This report is a summary of the
 
 \section{Gpt-2}
 
+Github user \enquote{nshepperd} created a fork of GPT-2 containing Python scripts to train a GPT-2 model. This code was successfully used by blogger and author \enquote{Gwern} (\url{https://www.gwern.net}) to train a GPT-2 model for creating poetry.
+
+
+Until the very end it was not possible to determine, how much actual text the model has seen at any training step. 
 \begin{itemize}
 	\item Welche implementierung und warum?
 	\item der blog post mit den gedichten
