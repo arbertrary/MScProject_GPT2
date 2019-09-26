@@ -1,10 +1,9 @@
 \documentclass[sigconf,natbib=false]{acmart}
-
 %%%%%%%%
 % Packages
 %%%%%%%%
 
-\usepackage[backend=biber]{biblatex}
+\usepackage[backend=bibtex]{biblatex}
 
 % Filter warnings issued by package biblatex starting with "Patching footnotes failed"
 % Source: https://tex.stackexchange.com/questions/202988/beamer-patching-footnotes-warning-patching-footnotes-failed-footnote-detectio
@@ -26,6 +25,7 @@
 \acmISBN{} % set this to remove ISBN
 \acmDOI{} % set this to remove DOI
 
+\newcommand{\burl}[1]{\textbf{\url{#1}}}
 
 %%%%%%%%
 % Meta information
@@ -81,11 +81,6 @@ The general task of this project was to expand a corpus of german text and then 
 
 This was based on the success of OpenAI's GPT-2 project which trained a language model on 40gb of english web text. The model was so successful in tasks such as text generation that OpenAI refused to release the training code and the entire model out of ethical reasons. The concern was that malicious parties could use GPT-2 to generate e.g. fake news for their own good.
 
-\begin{itemize}
-	\item dataset erweitern
-	\item language model
-\end{itemize}
-
 
 \section{Crawler}
 
@@ -101,39 +96,64 @@ For future work it could make sense to look into \url{https://pushshift.io/} whi
 
 \paragraph{Wattpad}
 
-Another page that was considered briefly was Wattpad \url{https://www.wattpad.com/}, a \enquote{social storytelling} platform. Users can share their own stories there and read those of other users. Upon examination of the web page's structure it was decided that Wattpad are not keen on users crawling their site. Therefore Wattpad was dismissed as well.
+Another page that was considered briefly was Wattpad \url{https://www.wattpad.com/}, a \enquote{social storytelling} platform. Users can share their own stories there and read those of other users. Upon examination of the web page's structure and HTML code it was decided that Wattpad obviously are not keen on users crawling their site. Therefore Wattpad was dismissed as well.
 
-\paragraph{Team Andro} The website Team Andro \url{https://www.team-andro.com/} is a german Bodybuilding and weightlifting page. It contains articles on training, nutrition, events and more. More importantly, however, it is accompanied by a large german web forum with a user count of almost 300.000 and around 10 million forum posts in total (last checked 2019-09-25).
+\paragraph{Team Andro} The website Team Andro \url{https://www.team-andro.com/} is a german Bodybuilding and weightlifting board. It contains articles on training, nutrition, sport events and more. More importantly, however, it is accompanied by a large german web forum with a user count of almost 300.000 and around 10 million forum posts in total (last checked 2019-09-25).
 
-Upon inquiry the site administrator provided some advice and a link to Team-Andro's sitemap which allowed to iterate through most of the forum's publicly available HTML pages.
+Upon inquiry the site administrator provided some helpful advice and a link to Team-Andro's sitemap which allowed to iterate through most of the forum's publicly available HTML pages.
 
 These pages were then parsed from HTML and saved in a directory structure representing the forum structure of Team Andro with each post represented as one text file. Additionally, meta data such as user names, time stamps etc were saved in a mongoDB database.
 
 
 \section{The Dataset}
 
-Prior to the addition of the Team-Andro text data, the existing corpus consisted of ... TODO
+Prior to the addition of the Team-Andro text data, the existing corpus consisted of a collection of various german text sources. This corpus contains for example the german Wikipedia and german novels and in total amounted to around 8GB of plain text files
 
 
-The Team-Andro corpus consists of mostly german web text. As such it is often unstructured, meaningless text without contiguous sentences. 
+The Team-Andro corpus consists of mostly german web text. As such it is often unstructured, meaningless text without contiguous sentences. It is not as \enquote{bad} as e.g. Twitch text but still contains its fair share of internet slang and site-internal phrases and memes.
 
-\begin{itemize}
-	\item der bestehende super corpus
-	\item Der neue Team Andro Corpus
-\end{itemize}
+Phrases which are extremely overrepresented are for example \enquote{\textit{[username] hat am [date] geschrieben:}}.
+This indicates a quote of an earlier post inside a new post which often results in repetitions and nested posts.
 
-\section{Elmo}
+Additionally to a corpus with a directory structure representing the forum structure, the Team-Andro text was also merged into simple text files with 50MB each. This corpus consists of 2.8GB of plain text files.
+
+
+
+\section{ELMo}
+\cite{Peters:2018}
 
 \begin{itemize}
 	\item Visualisierte elmo embeddings? TODO
 \end{itemize}
 
-\section{Gpt-2}
+\section{GPT-2}
+After failing to actually work with the ELMo embeddings for text generation, priorities were set more towards GPT-2 which had been the initial goal of the project.
+
+
+
+\cite{radford2019language}
 
 Github user \enquote{nshepperd} created a fork of GPT-2 containing Python scripts to train a GPT-2 model. This code was successfully used by blogger and author \enquote{Gwern} (\url{https://www.gwern.net}) to train a GPT-2 model for creating poetry.
 
+As a side note, Reddit user \burl{https://www.reddit.com/u/disumbrationist} created a subreddit used solely by bots of various subreddits trained using \textit{nshepperd's} code. This subreddit can be found at \burl{https://www.reddit.com/r/SubSimulatorGPT2/}.
 
-Until the very end it was not possible to determine, how much actual text the model has seen at any training step. 
+Another fork/implementation that was considered for training was created by github user ConnorJL \burl{https://github.com/ConnorJL/GPT2}. At the time (July/August 2019), ConnorJL's code was not usable due to some issues with their files uploaded to Google storage.
+
+At the time of writing this report (\today), these issues seem to have been resolved and the repository received some updates in early September. See  also future work in \cref{sec:FW}.
+
+
+At the time of training, OpenAI had released a small (124M parameters) and a medium (355M parameters) model. To compare the differences in the quality of the generated text, two models were trained.
+
+One was trained on top of the pre-trained 124M model and used a very small sample size of the text data (two 50MB files, one from Team-Andro, the other from the existing corpus).
+
+The second model was trained using the 355M model and the entire corpus. 
+
+Both models were trained for around two weeks. The small model managed to do 522.000 steps, the larger one 180.000 steps.
+
+
+Unfortunately until the very end it was not possible to determine how much actual text the models had seen at any given training step. Nshepperd's code was rather opaque in this regard.
+
+
 \begin{itemize}
 	\item Welche implementierung und warum?
 	\item der blog post mit den gedichten
@@ -144,13 +164,15 @@ Until the very end it was not possible to determine, how much actual text the mo
 
 
 
-\section{What could have gone better? Future Work}
+\section{What could have gone better?/Future Work}
+\label{sec:FW}
+Many problems during this project, especially with training the language models, arose because of the choice to use existing code. Trying to understand e.g. nsheppard's code took a surprising amount of time. Time, which might have even been used to write own data loaders and training scripts for GPT-2.
 
-\begin{itemize}
-	\item not depend so much on existing repositories/forks 
-	\item rather implement own training scripts for gpt2?
-	
-\end{itemize}
+On the other hand, ConnorJL's GPT-2 implementation was updated recently and some issues fixed. It might be worth it to have another look at this before trying to write custom training scripts.
+
+Since the ELMo training was abandoned rather early during this project in favor of GPT-2, it was not possible to look into what to actually do with the trained ELMo embeddings. I did not manage to find out how to use ELMo for text generation.
+
+
 
 
  
