@@ -1,4 +1,6 @@
-\documentclass[sigconf,natbib=false]{acmart}
+%\documentclass[sigconf,natbib=false]{acmart}
+\documentclass{scrartcl}
+%\documentclass{article}
 %%%%%%%%
 % Packages
 %%%%%%%%
@@ -20,19 +22,19 @@
 %%%%%%%%
 % Remove copyright
 %%%%%%%%
-\setcopyright{none}
-\settopmatter{printacmref=false}
-\acmISBN{} % set this to remove ISBN
-\acmDOI{} % set this to remove DOI
+%\setcopyright{none}
+%\settopmatter{printacmref=false}
+%\acmISBN{} % set this to remove ISBN
+%\acmDOI{} % set this to remove DOI
 
 \newcommand{\burl}[1]{\textbf{\url{#1}}}
 
 %%%%%%%%
 % Meta information
 %%%%%%%%
-\acmConference[]
-	{Masterpraktikum Lehrstuhl X}
-	{SoSe \the\year}
+%\acmConference[]
+%	{Masterpraktikum Lehrstuhl X}
+%	{SoSe \the\year}
 
 
 %%%%%%%%
@@ -54,18 +56,21 @@
 %%%%%%%%
 
 \title{Bericht Masterpraktikum}
-%\subtitle{An optional subtitle}
+%\subtitle{Lehrstuhl X, }
 
 \author{Armin Bernstetter}
-\affiliation{%
-  \institution{University of W\"urzburg}
-  \today
-}
+%\affiliation{%
+%  \institution{University of W\"urzburg}
+%  \today
+%}
 % \email{trovato@corporation.com}
 
+\maketitle
 
 \begin{abstract}
-This report is a summary of the 
+Dieser Praktikumsbericht fasst zusammen, was während der Arbeit am Projekt für das Masterpraktikum geschehen ist. Basis für das Projekt war die grundlegende Idee, GPT-2 für einen deutschen Textkorpus zu adaptieren. Dazu wurde zunächst ein bereits bestehender Korpus erweitert mit Texten eines deutschsprachigen Internetforums. 
+
+Anschließend wurden auf diesem erweiterten Korpus Modelle trainiert (ELMo und GPT-2).
 \end{abstract}
 
 
@@ -73,49 +78,60 @@ This report is a summary of the
 % Content
 %%%%%%%%
 
-\maketitle
+
 
 \section{Introduction/Motivation}
 
 The general task of this project was to expand a corpus of german text and then train language models on this corpus.
 
-This was based on the success of OpenAI's GPT-2 project which trained a language model on 40gb of english web text. The model was so successful in tasks such as text generation that OpenAI refused to release the training code and the entire model out of ethical reasons. The concern was that malicious parties could use GPT-2 to generate e.g. fake news for their own good.
+This was based on the overwhelming success of OpenAI's \footnote{\url{https://openai.com/}} GPT-2 project \cite{radford2019language} which trained a language model on 40GB of english web text. The model was so successful in tasks such as text generation that OpenAI refused to release the training code, the full training data and the entire model out of ethical reasons. The concern was that malicious parties could use GPT-2 to generate e.g. fake news for their own good and to spread misinformation.
+
+Therefore it was necessary to create a new dataset, train the models on this corpus and check whether GPT-2 also works for text in languages other than English, e.g. German.
 
 
 \section{Crawler}
 
 Several available german text corpora were already included in the existing corpus. This included the german Wikipedia and novels. 
-
-Crawling the web or rather specific pages for german text is a good way to get new text data.
-
+To extend the corpus, the plan was to crawl several german webpages for useful text data.
 
 \paragraph{Reddit}
-Pages that were considered initially were german subreddits on Reddit. This includes subreddits such as \textbf{reddit.com/r/de} or \textbf{reddit.com/r/de\_iama}. Reddit's API unfortunately limits the amount of requests a script can make and would have required a workaround repeatedly requesting new tokens etc.
+Pages that were considered initially were german subreddits on Reddit. Reddit is a social media site for sharing and discussing content. It is organized into so called subreddits which are boards mostly focussed on single topics. Relevant for this project were subreddits such as \textit{/r/de}\footnote{\url{https://www.reddit.com/r/de}}, the main german-language subreddit or \textit{/r/de\_iama}\footnote{\url{https://www.reddit.com/r/de\_iama}}, probably the german subreddit with the most subscribed users (around 330.000 as of 2019-09-30).
+
+Reddit's API unfortunately limits the amount of requests a script can make and would have required a workaround repeatedly requesting new tokens etc.
 
 For future work it could make sense to look into \url{https://pushshift.io/} which offers a number of Reddit data dumps, mostly from some years ago.
 
 \paragraph{Wattpad}
 
-Another page that was considered briefly was Wattpad \url{https://www.wattpad.com/}, a \enquote{social storytelling} platform. Users can share their own stories there and read those of other users. Upon examination of the web page's structure and HTML code it was decided that Wattpad obviously are not keen on users crawling their site. Therefore Wattpad was dismissed as well.
+Another page that was considered briefly was Wattpad \footnote{\url{https://www.wattpad.com/}}, a \enquote{social storytelling} platform. Users can share their own stories there and read those of other users. Upon examination of the web page's structure and HTML code it was decided that Wattpad obviously are not keen on users crawling their site. Therefore Wattpad was dismissed as well.
 
-\paragraph{Team Andro} The website Team Andro \url{https://www.team-andro.com/} is a german Bodybuilding and weightlifting board. It contains articles on training, nutrition, sport events and more. More importantly, however, it is accompanied by a large german web forum with a user count of almost 300.000 and around 10 million forum posts in total (last checked 2019-09-25).
+\paragraph{Team-Andro} The website Team-Andro \footnote{\url{https://www.team-andro.com/}} is a german Bodybuilding and weightlifting board. It contains articles on training, nutrition, sport events and more. More importantly, however, it is accompanied by a large german web forum with a user count of almost 300.000 and around 10 million forum posts in total (last checked 2019-09-25).
 
-Upon inquiry the site administrator provided some helpful advice and a link to Team-Andro's sitemap which allowed to iterate through most of the forum's publicly available HTML pages.
+Upon inquiry the site administrator provided some helpful advice and a link to Team-Andro's sitemap. Unfortunately they had to decline the request for a simple and complete database dump of the forum's posts. Due to the forum's database structure it would not have been easily possible to exclude e.g. internal posts by administrators that need to remain private.
 
-These pages were then parsed from HTML and saved in a directory structure representing the forum structure of Team Andro with each post represented as one text file. Additionally, meta data such as user names, time stamps etc were saved in a mongoDB database.
+The forum uses the standard \textit{phpBB3}\footnote{\url{https://www.phpbb.com/}} board software and therefore the crawler should be applicable for other \textit{phpBB} boards with minor adaptations.
+
+
+Using the sitemap it was possible to simply iterate through most of the forum's publicly available HTML pages. Team-Andro's sitemap contains around 80 sub-sitemaps each containing links to around 10.000 forum topics/pages. These pages were then parsed from HTML and saved in a directory structure representing the forum structure of Team-Andro with each post represented as one text file. Additionally, meta data such as user names, time stamps etc were saved in a mongoDB database.
+Each of the forum topics contains at least one text post by a user and the largest topic on the entire site contains around 700.000 posts.
 
 
 \section{The Dataset}
 
-Prior to the addition of the Team-Andro text data, the existing corpus consisted of a collection of various german text sources. This corpus contains for example the german Wikipedia and german novels and in total amounted to around 8GB of plain text files
+Prior to the addition of the Team-Andro text data, the existing corpus consisted of a collection of various german text sources. This corpus contains for example the german Wikipedia and german novels and amounted to around 7.7GB of plain text files in total.
 
 
-The Team-Andro corpus consists of mostly german web text. As such it is often unstructured, meaningless text without contiguous sentences. It is not as \enquote{bad} as e.g. Twitch text but still contains its fair share of internet slang and site-internal phrases and memes.
+The Team-Andro corpus consists of mostly german web text. As such it is often unstructured, meaningless text without contiguous sentences. It is not as \enquote{bad} as e.g. text data from Twitch chat but still contains its fair share of internet slang and site-internal phrases and memes. Despite having a large Off-Topic subforum, a lot of the text is still focussed on topics such as sports in general and bodybuilding/weightlifting in particular.
 
-Phrases which are extremely overrepresented are for example \enquote{\textit{[username] hat am [date] geschrieben:}}.
+The text also contains some special cases due to the forum software.
+For example one of the phrases which are extremely overrepresented in the corpus is \enquote{\textit{[username] hat am [date] geschrieben:}}.
 This indicates a quote of an earlier post inside a new post which often results in repetitions and nested posts.
 
-Additionally to a corpus with a directory structure representing the forum structure, the Team-Andro text was also merged into simple text files with 50MB each. This corpus consists of 2.8GB of plain text files.
+In addition to a corpus with a directory structure representing the forum structure, the Team-Andro text was also merged into simple text files with 50MB each. This corpus consists of 2.8GB of plain text files.
+
+The combined corpus used in this project therefore had around 10.5GB of text with 75\% used as training data and 25\% set aside as \enquote{heldout}.
+
+For minor experiments, a \enquote{minimal corpus} was created consisting only of one 50MB file from the existing corpus and Team-Andro each.
 
 
 
@@ -142,7 +158,8 @@ Another fork/implementation that was considered for training was created by gith
 At the time of writing this report (\today), these issues seem to have been resolved and the repository received some updates in early September. See  also future work in \cref{sec:FW}.
 
 
-At the time of training, OpenAI had released a small (124M parameters) and a medium (355M parameters) model. To compare the differences in the quality of the generated text, two models were trained.
+At the time of training, OpenAI had released a small (124M parameters) and a medium (355M parameters) model. Initially, these were called 117M and 345M respectively but apparently there was a counting error which was fixed for a follow-up blog entry in August 2019\footnote{\url{https://openai.com/blog/gpt-2-6-month-follow-up/}}.
+To compare the differences in the quality of the generated text, two models were trained.
 
 One was trained on top of the pre-trained 124M model and used a very small sample size of the text data (two 50MB files, one from Team-Andro, the other from the existing corpus).
 
@@ -150,18 +167,45 @@ The second model was trained using the 355M model and the entire corpus.
 
 Both models were trained for around two weeks. The small model managed to do 522.000 steps, the larger one 180.000 steps.
 
-
 Unfortunately until the very end it was not possible to determine how much actual text the models had seen at any given training step. Nshepperd's code was rather opaque in this regard.
 
+The large model ended training with an average loss of $ 2.30 $ after starting with $ 3.47 $ at 100 steps.
+the small model ended with an average loss of $ 1.98 $ after starting with $ 4.32 $ at 100 steps.
+It is not clear how much these numbers actually mean in this context. Unfortunately in this case the most obvious way to see that something actually did happen during training is to look at some examples of generated text.
 
-\begin{itemize}
-	\item Welche implementierung und warum?
-	\item der blog post mit den gedichten
-	\item welche modelle kamen raus
-	\item Fragen und Zweifel/Probleme. Undurchsichtige Trainingsskripte usw
-	\item sample output und interactive prompt samples
-\end{itemize}
+\section*{GPT-2 Examples}
 
+This section shows example output text generated by the models after inputting a custom prompt. All outputs were generated using the same command and the \texttt{interactive\_conditional\_samples.py} script\footnote{\url{https://github.com/nshepperd/gpt-2/blob/finetuning/src/interactive_conditional_samples.py}}.
+
+\begin{verbatim}
+python src/interactive_conditional_samples.py --top_k 40 --temperature 0.9 \\
+--seed 2000 --model_name MODEL
+\end{verbatim}
+
+The numbers were those also used by Gwern in their GPT-2 poetry blog post \footnote{\url{https://www.gwern.net/GPT-2}}.
+
+\subsection*{Prompt A: \enquote{Ich trainiere meistens zweimal pro Woche mit einem Ganzkörperplan. Ich mache Bankdrücken und ...}}
+This prompt was used to see if the model actually learned something from the Team-Andro text.
+
+\subsubsection*{Unchanged Medium Model by OpenAI}
+\subsubsection*{Small Custom Model}
+\subsubsection*{Medium Custom Model}
+
+
+
+\subsection*{Prompt B: \enquote{I don't know any English anymore. I wish that I had learned more of}}
+This prompt was used to see if the model still knows its original English.
+
+\subsubsection*{Unchanged Medium Model by OpenAI}
+\subsubsection*{Small Model}
+\subsubsection*{Medium Model}
+
+\subsection*{Prompt C: \enquote{Goethe war ein bekannter Autor. Er verfasste unter anderem Faust und}}
+This prompt was used to see if the model knows something from Wikipedia or in general about Goethe.
+
+\subsubsection*{Unchanged Medium Model by OpenAI}
+\subsubsection*{Small Model}
+\subsubsection*{Medium Model}
 
 
 \section{What could have gone better?/Future Work}
@@ -172,7 +216,7 @@ On the other hand, ConnorJL's GPT-2 implementation was updated recently and some
 
 Since the ELMo training was abandoned rather early during this project in favor of GPT-2, it was not possible to look into what to actually do with the trained ELMo embeddings. I did not manage to find out how to use ELMo for text generation.
 
-
+Obviously the Team-Andro dataset might be useful for entirely different text mining, statistical or social science tasks, maybe not even including machine learning.
 
 
  
