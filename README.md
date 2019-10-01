@@ -10,6 +10,10 @@
 - `notes` contains ... notes
 
 
+## Container Registry
+
+The container registry in this repository currently contains the two docker containers which were used to train the ELMo model (bilmtfcuda10) and the gpt2 model.
+
 ## Stuff on vingilot (the relevant parts)
 
 ```
