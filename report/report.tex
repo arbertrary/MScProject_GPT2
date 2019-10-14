@@ -58,7 +58,7 @@
 \title{Bericht Masterpraktikum}
 %\subtitle{Lehrstuhl X, }
 
-\author{Armin Bernstetter}
+\author{Armin Bernstetter (Matrikelnr. 1876874)}
 %\affiliation{%
 %  \institution{University of W\"urzburg}
 %  \today
@@ -68,7 +68,11 @@
 \maketitle
 
 \begin{abstract}
-Dieser Praktikumsbericht fasst zusammen, was während der Arbeit am Projekt für das Masterpraktikum geschehen ist. Basis für das Projekt war die grundlegende Idee, GPT-2 für einen deutschen Textkorpus zu adaptieren. Dazu wurde zunächst ein bereits bestehender Korpus erweitert mit Texten eines deutschsprachigen Internetforums. Anschließend wurden auf diesem erweiterten Korpus language models trainiert (ELMo und GPT-2).
+\textbf{GER}
+Basis für das Projekt dieses Masterpraktikums war die grundlegende Idee, GPT-2 für einen deutschen Textkorpus zu adaptieren. Dazu wurde zunächst ein bereits bestehender Korpus erweitert mit Texten eines deutschsprachigen Internetforums. Anschließend wurden auf diesem erweiterten Korpus language models trainiert (ELMo und GPT-2). Der durch das größte dieser GPT-2 Modelle generierte deutsche Text ist von annähernd natürlichsprachlicher Qualität und eignet sich als \enquote{proof of concept}.
+\\\\
+\textbf{ENG}
+This project was based on the idea of applying GPT-2 to a german web text corpus. For this, an existing corpus was extended with text from a german internet forum. This data set was then used to train language models (ELMo and GPT-2). The largest of these GPT-2 models generates rather high-quality german text and serves as a proof of concept justifying further work.
 \end{abstract}
 
 
@@ -95,7 +99,7 @@ To extend the corpus, the plan was to crawl several german webpages for useful t
 \paragraph{Reddit}
 Pages that were considered initially were german subreddits on Reddit. Reddit is a social media site for sharing and discussing content. It is organized into so called subreddits which are boards mostly focussed on single topics. Relevant for this project were subreddits such as \textit{/r/de}\footnote{\url{https://www.reddit.com/r/de}}, the main german-language subreddit or \textit{/r/de\_iama}\footnote{\url{https://www.reddit.com/r/de\_iama}}, probably the german subreddit with the most subscribed users (around 330.000 as of 2019-09-30).
 
-Reddit's API unfortunately limits the amount of requests a script can make and would have required a workaround repeatedly requesting new tokens etc.
+Reddit's API unfortunately limits the amount of requests a script can make and would require actively trying to avoid this limitation.
 
 For future work it could make sense to look into \url{https://pushshift.io/} which offers a number of Reddit data dumps, mostly from some years ago.
 
@@ -103,14 +107,14 @@ For future work it could make sense to look into \url{https://pushshift.io/} whi
 
 Another page that was considered briefly was Wattpad \footnote{\url{https://www.wattpad.com/}}, a \enquote{social storytelling} platform. Users can share their own stories there and read those of other users. Upon examination of the web page's structure and HTML code it was decided that Wattpad obviously are not keen on users crawling their site. Therefore Wattpad was dismissed as well.
 
-\paragraph{Team-Andro} The website Team-Andro \footnote{\url{https://www.team-andro.com/}} is a german Bodybuilding and weightlifting board. It contains articles on training, nutrition, sport events and more. More importantly, however, it is accompanied by a large german web forum with a user count of almost 300.000 and around 10 million forum posts in total (last checked 2019-09-25).
+\paragraph{Team-Andro} The website Team-Andro \footnote{\url{https://www.team-andro.com/}} is a german Fitness and Bodybuilding board. It contains articles on training, nutrition, sport events and more. More importantly, however, it is accompanied by a large german web forum with a user count of almost 300.000 and around 10 million forum posts in total (last checked 2019-09-25).
 
 Upon inquiry the site administrator provided some helpful advice and a link to Team-Andro's sitemap. Unfortunately they had to decline the request for a simple and complete database dump of the forum's posts. Due to the forum's database structure it would not have been easily possible to exclude e.g. internal posts by administrators that need to remain private.
 
 The forum uses the standard \textit{phpBB3}\footnote{\url{https://www.phpbb.com/}} board software and therefore the crawler should be applicable for other \textit{phpBB} boards with minor adaptations.
 
 
-Using the sitemap it was possible to simply iterate through most of the forum's publicly available HTML pages. Team-Andro's sitemap contains around 80 sub-sitemaps each containing links to around 10.000 forum topics/pages. These pages were then parsed from HTML and saved in a directory structure representing the forum structure of Team-Andro with each post represented as one text file. Additionally, meta data such as user names, time stamps etc were saved in a mongoDB database.
+Using the sitemap, it was possible to simply iterate through most of the forum's publicly available HTML pages. Team-Andro's sitemap contains around 80 sub-sitemaps each containing links to around 10.000 forum topics/pages. These pages were then parsed from HTML and saved in a directory structure representing the forum structure of Team-Andro with each post represented as one text file. Additionally, meta data such as user names, time stamps etc were saved in a mongoDB database.
 Each of the forum topics contains at least one text post by a user and the largest topic on the entire site contains around 700.000 posts.
 
 
@@ -119,11 +123,11 @@ Each of the forum topics contains at least one text post by a user and the large
 Prior to the addition of the Team-Andro text data, the existing corpus consisted of a collection of various german text sources. This corpus contains for example the german Wikipedia and german novels and amounted to around 7.7GB of plain text files in total.
 
 
-The Team-Andro corpus consists of mostly german web text. As such it is often unstructured, meaningless text without contiguous sentences. It is not as \enquote{bad} as e.g. text data from Twitch chat but still contains its fair share of internet slang and site-internal phrases and memes. Despite having a large Off-Topic subforum, a lot of the text is still focussed on topics such as sports in general and bodybuilding/weightlifting in particular.
+The Team-Andro corpus consists of mostly german web text. As such it is often unstructured, meaningless text without contiguous sentences. It is not as \enquote{bad} as e.g. text data from Twitch chat but still contains its fair share of internet slang and site-internal phrases and memes. Despite having a large Off-Topic subforum, a lot of the text is still focussed on topics such as sports in general and fitness/bodybuilding/weightlifting in particular.
 
 The text also contains some special cases due to the forum software.
 For example one of the phrases which are extremely overrepresented in the corpus is \enquote{\textit{[username] hat am [date] geschrieben:}}.
-This indicates a quote of an earlier post inside a new post which often results in repetitions and nested posts.
+This indicates a quote of an earlier post inside a new post which often results in repetitions and nested posts of multiple levels.
 
 In addition to a corpus with a directory structure representing the forum structure, the Team-Andro text was also merged into simple text files with 50MB each. This corpus consists of 2.8GB of plain text files.
 
@@ -137,27 +141,21 @@ For minor experiments, a \enquote{minimal corpus} was created consisting only of
 
 ELMo is a deep contextualized word representation \cite{Peters:2018}. A tensorflow implementation of a deep bidirectional language model used to train ELMo representations is available on github \footnote{\url{https://github.com/allenai/bilm-tf}}.
 
-This implementation was used in this project to ease into the topic of training language models because the instructions listed in the github README file were concise and the code relatively easy to run.
+This implementation was used in this project to ease into the topic of training language models. A model was trained on the entire training data (75\% of the overall corpus) for around 2 weeks and 1.877.500 steps.
 
-The trained model was used to output word embeddings but it was not possible to find a way how to actually generate text using ELMo. 
+The trained model was successfully used to output word embeddings. Further examination of the trained model as well as tasks such as text generation have not been undertaken.
 
 
 \section{GPT-2}
-After failing to actually work with the ELMo embeddings for text generation, priorities were set more towards GPT-2 \cite{radford2019language} which had been the initial goal of the project.
+GPT-2 is a language model trained by OpenAI on a large corpus of web text \cite{radford2019language}.
 
-
-
-
+OpenAI refrained from publicizing their training code and larger versions of pretrained models.
 Github user \enquote{nshepperd} created a fork of GPT-2 containing Python scripts to train a GPT-2 model. This code was successfully used by blogger and author \enquote{Gwern} (\url{https://www.gwern.net}) to train a GPT-2 model for creating poetry.
 
 As a side note, Reddit user \burl{https://www.reddit.com/u/disumbrationist} created a subreddit used solely by bots of various subreddits trained using \textit{nshepperd's} code. This subreddit can be found at \burl{https://www.reddit.com/r/SubSimulatorGPT2/}.
 
-Another fork/implementation that was considered for training was created by github user ConnorJL \burl{https://github.com/ConnorJL/GPT2}. At the time (July/August 2019), ConnorJL's code was not usable due to some issues with their files uploaded to Google storage.
+Another fork/implementation that was considered for training was created by github user ConnorJL \burl{https://github.com/ConnorJL/GPT2}. At the time (July/August 2019), ConnorJL's code was not usable due to issues with their files uploaded to Google storage.
 
-At the time of writing this report (\today), these issues seem to have been resolved and the repository received some updates in early September. See  also future work in \cref{sec:FW}.
-
-
-At the time of training, OpenAI had released a small (124M parameters) and a medium (355M parameters) model. Initially, these were called 117M and 345M respectively but apparently there was a counting error which was fixed for a follow-up blog entry in August 2019\footnote{\url{https://openai.com/blog/gpt-2-6-month-follow-up/}}.
 To compare the differences in the quality of the generated text, two models were trained.
 
 One was trained on top of the pre-trained 124M model and used a very small sample size of the text data (two 50MB files, one from Team-Andro, the other from the existing corpus).
@@ -166,24 +164,25 @@ The second model was trained using the 355M model and the entire corpus.
 
 Both models were trained for around two weeks. The small model managed to do 522.000 steps, the larger one 180.000 steps.
 
-Unfortunately until the very end it was not possible to determine how much actual text the models had seen at any given training step. Nshepperd's code was rather opaque in this regard.
-
 The large model ended training with an average loss of $ 2.30 $ after starting with $ 3.47 $ at 100 steps.
 the small model ended with an average loss of $ 1.98 $ after starting with $ 4.32 $ at 100 steps.
-It is not clear how much these numbers actually mean in this context. Unfortunately in this case the most obvious way to see that something actually did happen during training is to look at some examples of generated text.
+
 
 \section{GPT-2 Examples}
 
 This section shows example output text generated by the models after inputting a custom prompt. All outputs were generated using the same command and the \\ \texttt{interactive\_conditional\_samples.py} script\footnote{\url{https://github.com/nshepperd/gpt-2/blob/finetuning/src/interactive_conditional_samples.py}}.
+For this script to work, the respective model files have to be located in \texttt{nshepperd/gpt-2/models}.
+\begin{verbatim}
+python src/interactive_conditional_samples.py --top_k 40 --temperature 0.9 \\
+--seed 2000 --model_name MODEL
+\end{verbatim}
 
 The small custom model used the pretrained 117M GPT-2 model as basis and was trained on the minimal corpus over 522.000 steps.
 
 The medium custom model used the pretrained 345M GPT-2 model as basis and was trained on the combined corpus over 180.000 steps.
 
-\begin{verbatim}
-python src/interactive_conditional_samples.py --top_k 40 --temperature 0.9 \\
---seed 2000 --model_name MODEL
-\end{verbatim}
+
+
 
 The numbers were those also used by Gwern in their GPT-2 poetry blog post \footnote{\url{https://www.gwern.net/GPT-2}}.
 
@@ -286,43 +285,78 @@ Most noticeably is that in this example the model only initially finished the pr
 \subsubsection{Medium Model}
 {\itshape
  it.
-I wish I had been more involved in it than I have been, and I can only hope that I will find that in the future when I'm older.\\
-I have found English because I am very proud of it, because I like the way it's spoken.\\
-But I have never been interested in it. \\
-I did not like it. \\
-I never even liked it until I met the family of David Thomson.\\
-And that was the time I went to study English at university.\\
-I started at the age of 18, 18 or 19, and I don't know why, but I started studying English at the age of 19.\\
-I remember a boy getting into an English class called, and the teacher said: "Oh, sorry, Mr.\\
+I wish I had been more involved in it than I have been, and I can only hope that I will find that in the future when I'm older.
+\\
+I have found English because I am very proud of it, because I like the way it's spoken.
+\\
+But I have never been interested in it.
+ \\
+I did not like it.
+ \\
+I never even liked it until I met the family of David Thomson.
+\\
+And that was the time I went to study English at university.
+\\
+I started at the age of 18, 18 or 19, and I don't know why, but I started studying English at the age of 19.
+\\
+I remember a boy getting into an English class called, and the teacher said: "Oh, sorry, Mr.
+\\
 Taylor, but you have to get out of this class.
-Oh, sorry.\\
-I don't want more English lessons.\\
-I don't really like it."\\
-We sat there a few minutes watching that boy get into class and look at the teacher and be like, "I don't like it.\\
-I don't like it at all.\\
-I don't like it at all," and then he looked and said: "I've studied English for more than twenty years and I don't like it."\\
-I said: "So, Mr.\\
-Taylor, I did the same thing when I was 20.\\
-I didn't like it.\\
-I didn't like it at all.\\
-I was so embarrassed, even though I had been studying English for twenty years.\\
-But that's the way these things work.\\
-They take a long time to work out.\\
-So, um so einiges bewahrte ich mich aber auch hier.\\
-I studied English, no doubt about it, from an early age and I always liked it.\\
-I had never studied French, Dutch, German, no doubt about it.\\
-No doubt about it.\\
-I loved all of them.\\
-No doubt about it.\\
-But after I got into history I started studying history.\\
-I loved the historical aspect of the English language.\\
-And I learned so much from Henry VIII.\\
-and Catherine of Aragon.\\
-I really loved it.\\
-But it was nothing like what the other person told me.\\
+Oh, sorry.
+\\
+I don't want more English lessons.
+\\
+I don't really like it."
+\\
+We sat there a few minutes watching that boy get into class and look at the teacher and be like, "I don't like it.
+\\
+I don't like it at all.
+\\
+I don't like it at all," and then he looked and said: "I've studied English for more than twenty years and I don't like it."
+\\
+I said: "So, Mr.
+\\
+Taylor, I did the same thing when I was 20.
+\\
+I didn't like it.
+\\
+I didn't like it at all.
+\\
+I was so embarrassed, even though I had been studying English for twenty years.
+\\
+But that's the way these things work.
+\\
+They take a long time to work out.
+\\
+So, um so einiges bewahrte ich mich aber auch hier.
+\\
+I studied English, no doubt about it, from an early age and I always liked it.
+\\
+I had never studied French, Dutch, German, no doubt about it.
+\\
+No doubt about it.
+\\
+I loved all of them.
+\\
+No doubt about it.
+\\
+But after I got into history I started studying history.
+\\
+I loved the historical aspect of the English language.
+\\
+And I learned so much from Henry VIII.
+\\
+and Catherine of Aragon.
+\\
+I really loved it.
+\\
+But it was nothing like what the other person told me.
+\\
 It was like studying history and it was very superficial.\\
-And I loved that.\\
-And finally, eventually I began to get bored.\\
+And I loved that.
+\\
+And finally, eventually I began to get bored.
+\\
 I don't like that stuff
 }
 
@@ -345,7 +379,8 @@ Sind in die Erscheinung der Erscheinung in der Anstalt erster Stunde der Zeitung
 Sind wird nicht die Erscheinung von die Erscheinung die Erziehung die Erziehung die Erziehung die Erziehung die Erziehung sind, wird er sie sich in das Erscheinung von die Erscheinung die Erziehung die Erziehung die Erziehung sind, wird er sie sich in das Erscheinung von die Erscheinung die Erziehung die Erziehung sind. When the devil's body is buried with his crown and his horse, he calls to the dead, "My brother! Come now, where
 }
 \paragraph{Comments:}
-The model partially outputs german text but mostly english. Seemingly it recognizes the context of literature by generating rather literary-sounding phrases such as \enquote{When the devil’sbody is buried with his crown and his horse, he calls to the dead, ”My brother! Come	now, where} 
+The model partially outputs german text but mostly english. Seemingly it recognizes the context of literature by generating rather literary-sounding phrases such as \enquote{When the devil’s
+body is buried with his crown and his horse, he calls to the dead, ”My brother! Come	now, where} 
 
 \subsubsection{Small Model}
 {\itshape sagte in seinem Aufsatz: Wie es nach dem Tode dieses Faust aus dem Lande an sein kunstvolles Stück geworden war, kann ich dir wahr genetisch von mir her erweichen, so hat wohl mir niemand auf der anderen Seite eine Gefahr erbracht.
@@ -375,7 +410,7 @@ Im Jahre 1847 verfasste er eine Arbeit mit Julius Kü
 \paragraph{Comments:} Here, the model recognizes that the prompt references a person. Although the text doesn't continue with Goethe, it mentions Schiller and Schlegel, both contemporaries of Goethe. Also it correctly mentions the overall time period (1780-1847) in which Goethe and the others lived.
 
 \subsection{Discussion}
-Obviously all of the generated text samples seen in the section above are only a few examples. Evaluating the quality of the trained models simply based on the text is not sufficient for actual scientific work. Unfortunately this project could not deliver factual numbers that assess how good the models are.
+It is necessary to note that the generated text samples seen in the section above are only a few examples.
 
 Comparing the three different models does, however, show some tendencies. 
 \begin{itemize}
@@ -385,32 +420,32 @@ Comparing the three different models does, however, show some tendencies.
 \end{itemize}
 
 
-\section{What could have gone better?/Future Work}
+\section{Future Work}
 \label{sec:FW}
-Many problems during this project, especially with training the language models, arose because of the choice to use existing code. Trying to understand e.g. nsheppard's code took a surprising amount of time. Time, which might have even been used to write own data loaders and training scripts for GPT-2.
+There are several approaches that can be taken to expand on this work.
 
-On the other hand, ConnorJL's GPT-2 implementation was updated recently and some issues fixed. It might be worth it to have another look at this before trying to write custom training scripts.
+Instead of relying on other's code to train GPT-2, a sensible approach might be to write own data loaders and training scripts for GPT-2.
 
-Since the ELMo training was abandoned rather early during this project in favor of GPT-2, it was not possible to look into what to actually do with the trained ELMo embeddings. I did not manage to find out how to use ELMo for text generation.
+On the other hand, ConnorJL's GPT-2 implementation (\burl{https://github.com/ConnorJL/GPT2}) was updated recently and some issues have been fixed. It might be worth it to have another look at this before trying to write custom training scripts.
 
-Obviously the Team-Andro dataset might be useful for entirely different text mining, statistical or social science tasks, maybe not even including machine learning.
+The Team-Andro dataset might be useful for entirely different text mining, statistical or social science tasks, maybe not even including machine learning.
 
-OpenAI recently released a larger model (774M) in a blog post\footnote{\url{https://openai.com/blog/gpt-2-6-month-follow-up/}}.
+At the time of training, OpenAI had released a small (124M parameters) and a medium (355M parameters) model. Initially, these were called 117M and 345M respectively but apparently there was a counting error which was fixed for a follow-up blog entry in August 2019\footnote{\url{https://openai.com/blog/gpt-2-6-month-follow-up/}}.
 
+In addition, they released another, larger model (774M parameters). 
 With better training scripts, even more german text, and this large model as basis, a trained model could possibly generate very high quality, coherent german (and English) text.
 
 
 \section{Conclusion}
-In retrospect this project could have contributed far more than it actually did. Some problems arose due to short-sighted decisions (using random GPT-2 implementations from github), others were blown out of proportion because of procrastinating to actually, thoroughly look into code and some topics in general.
 
-The major contributions here are 
+The major contributions of this project are 
 \begin{itemize}
-	\item A dataset of german web text from an internet forum on fitness
+	\item A dataset of german web text from an internet forum focused on fitness topics
 	\item A trained model of ELMo embeddings
 	\item Two trained GPT-2 models
 \end{itemize}
 
-All of these models in themselves are probably not very useful for future use. They do, however, show a tendency in the quality of generated text. Therefore they might be used as a justification to once again dive into the task of training GPT-2 on a german text corpus and start from scratch.
+All of these models in themselves are probably not very useful for future use. They do, however, show a tendency in the quality of generated text and serve as a proof of concept. Therefore they might be used as a justification to once again dive into the task of training GPT-2 on a german text corpus and start from scratch.
 
  
 %\input{content/introduction}
