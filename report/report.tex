@@ -55,8 +55,8 @@
 % Front matter
 %%%%%%%%
 
-\title{Bericht Masterpraktikum}
-%\subtitle{Lehrstuhl X, }
+\title{Fine-tuning Large Language Models on German Texts}
+\subtitle{Masterpraktikum, Lehrstuhl X}
 
 \author{Armin Bernstetter (Matrikelnr. 1876874)}
 %\affiliation{%
@@ -86,10 +86,15 @@ This project was based on the idea of applying GPT-2 to a german web text corpus
 
 The general task of this project was to expand a corpus of german text and then train language models on this corpus.
 
-This was based on the overwhelming success of OpenAI's \footnote{\url{https://openai.com/}} GPT-2 project \cite{radford2019language} which trained a language model on 40GB of english web text. The model was so successful in tasks such as text generation that OpenAI refused to release the training code, the full training data and the entire model out of ethical reasons. The concern was that malicious parties could use GPT-2 to generate e.g. fake news for their own good and to spread misinformation.
+
+This was based on the overwhelming success of OpenAI's\footnote{\url{https://openai.com/}} GPT-2 project \cite{radford2019language} which trained a language model on 40GB of english web text. The model was so successful in tasks such as text generation that OpenAI refused to release the training code, the full training data and the entire model out of ethical reasons. The concern was that malicious parties could use GPT-2 to generate e.g. fake news for their own good and to spread misinformation.
 
 Therefore it was necessary to create a new dataset, train the models on this corpus and check whether GPT-2 also works for text in languages other than English, e.g. German.
 
+
+
+The repository containing code, docker images, and a Readme file can be found on the Informatik Uni Würzburg gitlab server\footnote{\url{https://gitlab2.informatik.uni-wuerzburg.de/s319059/mprak}}
+The Readme file contains information on the used third-party code, the data sets' locations, and how text examples can be generated from th trained GPT-2 models. 
 
 \section{Crawler}
 
@@ -101,13 +106,13 @@ Pages that were considered initially were german subreddits on Reddit. Reddit is
 
 Reddit's API unfortunately limits the amount of requests a script can make and would require actively trying to avoid this limitation.
 
-For future work it could make sense to look into \url{https://pushshift.io/} which offers a number of Reddit data dumps, mostly from some years ago.
+For future work it could make sense to look into pushshift.io\footnote{\url{https://pushshift.io/}} which offers a number of Reddit data dumps, mostly from some years ago.
 
 \paragraph{Wattpad}
 
-Another page that was considered briefly was Wattpad \footnote{\url{https://www.wattpad.com/}}, a \enquote{social storytelling} platform. Users can share their own stories there and read those of other users. Upon examination of the web page's structure and HTML code it was decided that Wattpad obviously are not keen on users crawling their site. Therefore Wattpad was dismissed as well.
+Another page that was considered briefly was Wattpad\footnote{\url{https://www.wattpad.com/}}, a \enquote{social storytelling} platform. Users can share their own stories there and read those of other users. Upon examination of the web page's structure and HTML code it was decided that Wattpad obviously are not keen on users crawling their site. Therefore Wattpad was dismissed as well.
 
-\paragraph{Team-Andro} The website Team-Andro \footnote{\url{https://www.team-andro.com/}} is a german Fitness and Bodybuilding board. It contains articles on training, nutrition, sport events and more. More importantly, however, it is accompanied by a large german web forum with a user count of almost 300.000 and around 10 million forum posts in total (last checked 2019-09-25).
+\paragraph{Team-Andro} The website Team-Andro\footnote{\url{https://www.team-andro.com/}} is a german fitness and bodybuilding board. It contains articles on training, nutrition, sport events and more. More importantly, however, it is accompanied by a large german web forum with a user count of almost 300.000 and over 10 million forum posts in total (last checked 2019-10-17).
 
 Upon inquiry the site administrator provided some helpful advice and a link to Team-Andro's sitemap. Unfortunately they had to decline the request for a simple and complete database dump of the forum's posts. Due to the forum's database structure it would not have been easily possible to exclude e.g. internal posts by administrators that need to remain private.
 
@@ -139,7 +144,7 @@ For minor experiments, a \enquote{minimal corpus} was created consisting only of
 
 \section{ELMo}
 
-ELMo is a deep contextualized word representation \cite{Peters:2018}. A tensorflow implementation of a deep bidirectional language model used to train ELMo representations is available on github \footnote{\url{https://github.com/allenai/bilm-tf}}.
+ELMo is a deep contextualized word representation \cite{Peters:2018}. A tensorflow implementation of a deep bidirectional language model used to train ELMo representations is available on github\footnote{\url{https://github.com/allenai/bilm-tf}}.
 
 This implementation was used in this project to ease into the topic of training language models. A model was trained on the entire training data (75\% of the overall corpus) for around 2 weeks and 1.877.500 steps.
 
@@ -150,11 +155,11 @@ The trained model was successfully used to output word embeddings. Further exami
 GPT-2 is a language model trained by OpenAI on a large corpus of web text \cite{radford2019language}.
 
 OpenAI refrained from publicizing their training code and larger versions of pretrained models.
-Github user \enquote{nshepperd} created a fork of GPT-2 containing Python scripts to train a GPT-2 model. This code was successfully used by blogger and author \enquote{Gwern} (\url{https://www.gwern.net}) to train a GPT-2 model for creating poetry.
+Github user \enquote{nshepperd} created a fork of GPT-2 containing Python scripts to train a GPT-2 model. This code was successfully used by blogger and author Gwern\footnote{\url{https://www.gwern.net}} to train a GPT-2 model for creating poetry.
 
-As a side note, Reddit user \burl{https://www.reddit.com/u/disumbrationist} created a subreddit used solely by bots of various subreddits trained using \textit{nshepperd's} code. This subreddit can be found at \burl{https://www.reddit.com/r/SubSimulatorGPT2/}.
+As a side note, Reddit user disumbrationist\footnote{\burl{https://www.reddit.com/u/disumbrationist}} created a subreddit used solely by bots of various subreddits trained using \textit{nshepperd's} code. This subreddit is called SubSimulatorGPT2\footnote{\burl{https://www.reddit.com/r/SubSimulatorGPT2/}}.
 
-Another fork/implementation that was considered for training was created by github user ConnorJL \burl{https://github.com/ConnorJL/GPT2}. At the time (July/August 2019), ConnorJL's code was not usable due to issues with their files uploaded to Google storage.
+Another fork/implementation that was considered for training was created by github user ConnorJL\footnote{\burl{https://github.com/ConnorJL/GPT2}}. At the time (July/August 2019), ConnorJL's code was not usable due to issues with their files uploaded to Google storage.
 
 To compare the differences in the quality of the generated text, two models were trained.
 
@@ -184,7 +189,7 @@ The medium custom model used the pretrained 345M GPT-2 model as basis and was tr
 
 
 
-The numbers were those also used by Gwern in their GPT-2 poetry blog post \footnote{\url{https://www.gwern.net/GPT-2}}.
+These numbers were also used by Gwern in their GPT-2 poetry blog post\footnote{\url{https://www.gwern.net/GPT-2}}.
 
 \subsection{Prompt A: \enquote{Ich trainiere meistens zweimal pro Woche mit einem Ganzkörperplan. Ich mache Bankdrücken und ...}}
 
@@ -261,7 +266,7 @@ Kirillov married his girlfriend in 1960, and when they got married they went thr
 
 \paragraph{Comments:} Obviously since the original 345M model was trained in English, the text quality is rather high. Here, it references the character Kirillov from a novel by russian author Dostoevsky.
 
-\subsubsection{Small Model}
+\subsubsection{Small Custom Model}
 {\itshape
  the game.
 Ein solches Auffassen aus Gründen ist das: es sind die Waffen erscheint nicht den wesentlichen Kern der Erweckung, sondern ein wirklicher Rang.
@@ -282,7 +287,7 @@ Dann aber erfordert das Ich und seine Seele,}
 \paragraph{Comments:}
 Most noticeably is that in this example the model only initially finished the prompt in english but then continued in german.
 
-\subsubsection{Medium Model}
+\subsubsection{Medium Custom Model}
 {\itshape
  it.
 I wish I had been more involved in it than I have been, and I can only hope that I will find that in the future when I'm older.
@@ -382,7 +387,7 @@ Sind wird nicht die Erscheinung von die Erscheinung die Erziehung die Erziehung 
 The model partially outputs german text but mostly english. Seemingly it recognizes the context of literature by generating rather literary-sounding phrases such as \enquote{When the devil’s
 body is buried with his crown and his horse, he calls to the dead, ”My brother! Come	now, where} 
 
-\subsubsection{Small Model}
+\subsubsection{Small Custom Model}
 {\itshape sagte in seinem Aufsatz: Wie es nach dem Tode dieses Faust aus dem Lande an sein kunstvolles Stück geworden war, kann ich dir wahr genetisch von mir her erweichen, so hat wohl mir niemand auf der anderen Seite eine Gefahr erbracht.
 Erinnern wir uns nun, daß diese Gegensätzlichkeiten, die ihre besondere Grundlage durch die Mächtigkeit und Kultur des Dichters und Dichtertums, ihre Aufgabe und ihren Erlebten in der Kunst der Gegenwart und ihren Anfechtungen und Ineinanderspielen zum Ausdruck kommen.
 Der Versuch, den Begriff der Form zu bestimmen, ist in jeder Hinsicht nicht zu denken.
@@ -394,7 +399,7 @@ Dessen Strecke der Gedanke des \enquote{schönen Seldes} ist vorwiegend dem Löw
 \paragraph{Comments:}
 Here the model recognizes German and references poetry (\enquote{Dichters und Dichtertums}). On the other hand, it also mentions fitness topics which have nothing to do with the prompt.
 
-\subsubsection{Medium Model}
+\subsubsection{Medium Custom Model}
 {\itshape
  das Wort Theorie, mit denen er später auch die gesamte Weltwissenschaft vertraut hatte, mit Faust.
 Friedrich Schlegel-Schiller verfasste den Beitrag der Werke Schlegels.
@@ -426,7 +431,7 @@ There are several approaches that can be taken to expand on this work.
 
 Instead of relying on other's code to train GPT-2, a sensible approach might be to write own data loaders and training scripts for GPT-2.
 
-On the other hand, ConnorJL's GPT-2 implementation (\burl{https://github.com/ConnorJL/GPT2}) was updated recently and some issues have been fixed. It might be worth it to have another look at this before trying to write custom training scripts.
+On the other hand, ConnorJL's GPT-2 implementation\footnote{\burl{https://github.com/ConnorJL/GPT2}} was updated recently and some issues have been fixed. It might be worth it to have another look at this before trying to write custom training scripts.
 
 The Team-Andro dataset might be useful for entirely different text mining, statistical or social science tasks, maybe not even including machine learning.
 
