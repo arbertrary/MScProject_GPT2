@@ -1,4 +1,13 @@
-# Masterpraktikum
+# MSc Programming Project 2019
+
+This was a programming project done during my M.Sc. program at University of Würzburg.
+
+The goal was to fine-tune the - at that time in 2019 - rather small publically available GPT-2 models.
+Since these models then only knew English, I fine-tuned them on german Wikipedia texts and posts from a german phpBB3 internet forum focussing on the rather specific topic of fitness and strength training.
+I successfully managed to train the models to respond in german to german prompts and provide e.g. strength training advice.
+
+A write-up of this project can be found here: [/report/report.pdf](https://github.com/arbertrary/MScProject_GPT2/blob/master/report/report.pdf)
+
 
 ## Overview
 
